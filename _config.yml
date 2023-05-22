@@ -3,30 +3,31 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Title (display)
-title: Japan CSS Support Example Blog
+title: Japan Azure Big Data Support Blog
 # Sub Title (display)
-subtitle: Japan CSS Support Example Blog
+subtitle: 日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。
 # Description
-description: Japan CSS Support Example Blog
+description: 日日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。
 
 # Keywords
 keywords:
-  - Information
-  - Example
+  - Azure
+  - Big Data
+  - Data Factory
 
-author: CSS Japan
+author: Azure Big Data Support Team
 
 # Tag (hexo helper)
 root_tag_generator:
   root_tag_names:
-    - Information
+    - Data Factory
   sub_tag_limit: 20
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://cssjpn.github.io/blog/
+url: https://jpaz-bigdata.github.io/blog/
 github:
-  url: https://github.com/cssjpn/blog-example/
+  url: https://github.com/jpaz-bigdata/blog
   posts_dir: articles
   default_branch: main
   # show last update and contributors from GitHub API and show in post header
@@ -43,7 +44,7 @@ skip_render:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:cssjpn/blog-example.git
+  repo: git@github.com:jpaz-bigdata/blog.git
   branch: gh-pages
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }} [skip ci]"
 

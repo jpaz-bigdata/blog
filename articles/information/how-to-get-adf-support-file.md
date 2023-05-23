@@ -11,7 +11,7 @@ tags:
 課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。  
 サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。
 
-![](./images/how-to-get-adf-support-file-1.png)
+![](./images/how-to-get-adf-support-file-1.png?raw=true)
 
   
 

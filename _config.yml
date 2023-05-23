@@ -20,7 +20,7 @@ author: Azure Big Data Support Team
 # Tag (hexo helper)
 root_tag_generator:
   root_tag_names:
-    - Data Factory
+    - DataFactory
   sub_tag_limit: 20
 
 # URL

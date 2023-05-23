@@ -6,7 +6,7 @@
   <link href="https://jpaz-bigdata.github.io/blog/atom.xml" rel="self"/>
   
   <link href="https://jpaz-bigdata.github.io/blog/"/>
-  <updated>2023-05-23T04:22:26.118Z</updated>
+  <updated>2023-05-23T04:34:49.211Z</updated>
   <id>https://jpaz-bigdata.github.io/blog/</id>
   
   <author>
@@ -21,15 +21,15 @@
     <link href="https://jpaz-bigdata.github.io/blog/information/how-to-get-adf-support-file/"/>
     <id>https://jpaz-bigdata.github.io/blog/information/how-to-get-adf-support-file/</id>
     <published>2023-05-23T00:00:00.000Z</published>
-    <updated>2023-05-23T04:22:26.118Z</updated>
+    <updated>2023-05-23T04:34:49.211Z</updated>
     
-    <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="./images/how-to-get-adf-support-file-1.png?raw=true"></p><p>また、担当がセキュアなアップロード サイトのご用意をいたします。お問い合わせのメールにサイトのリンクが添付されます。</p><p>以下手順にてアップロードをしていただきますようお願いいたします。 </p><ol><li><p>共有されたサイトのリンクをクリックします。  </p></li><li><p>[+ ファイルの追加] をクリックし、アップロードしたいファイルを選択してください。<br>アップロードの進捗バーが完了し、”ファイル転送が完了しました” と表示されるまでお待ちください。</p></li></ol><p>ファイル サイズの上限は、1 ファイルあたり 100 GB までとなります。<br>大きなファイルのやりとりが必要な場合、担当にご相談ください。</p>]]></content>
+    <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="/blog/information/how-to-get-adf-support-file/how-to-get-adf-support-file-1.png"></p><p>また、担当がセキュアなアップロード サイトのご用意をいたします。お問い合わせのメールにサイトのリンクが添付されます。</p><p>以下手順にてアップロードをしていただきますようお願いいたします。 </p><ol><li><p>共有されたサイトのリンクをクリックします。  </p></li><li><p>[+ ファイルの追加] をクリックし、アップロードしたいファイルを選択してください。<br>アップロードの進捗バーが完了し、”ファイル転送が完了しました” と表示されるまでお待ちください。</p></li></ol><p>ファイル サイズの上限は、1 ファイルあたり 100 GB までとなります。<br>大きなファイルのやりとりが必要な場合、担当にご相談ください。</p>]]></content>
     
     
       
       
     <summary type="html">&lt;p&gt;課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。&lt;br&gt;サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;./images/</summary>
+&lt;p&gt;&lt;img src=&quot;/blog/inf</summary>
       
     
     

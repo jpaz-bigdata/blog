@@ -6,7 +6,7 @@
   <link href="https://jpaz-bigdata.github.io/blog/atom.xml" rel="self"/>
   
   <link href="https://jpaz-bigdata.github.io/blog/"/>
-  <updated>2023-05-23T04:45:46.367Z</updated>
+  <updated>2023-05-23T05:31:32.243Z</updated>
   <id>https://jpaz-bigdata.github.io/blog/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/"/>
     <id>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</id>
     <published>2023-05-23T00:00:00.000Z</published>
-    <updated>2023-05-23T04:45:46.367Z</updated>
+    <updated>2023-05-23T05:31:32.243Z</updated>
     
-    <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="/blog/DataFactory/how-to-get-adf-support-file/how-to-get-adf-support-file-1.png"></p><p>また、担当がセキュアなアップロード サイトのご用意をいたします。お問い合わせのメールにサイトのリンクが添付されます。</p><p>以下手順にてアップロードをしていただきますようお願いいたします。 </p><ol><li><p>共有されたサイトのリンクをクリックします。  </p></li><li><p>[+ ファイルの追加] をクリックし、アップロードしたいファイルを選択してください。<br>アップロードの進捗バーが完了し、”ファイル転送が完了しました” と表示されるまでお待ちください。</p></li></ol><p>ファイル サイズの上限は、1 ファイルあたり 100 GB までとなります。<br>大きなファイルのやりとりが必要な場合、担当にご相談ください。</p>]]></content>
+    <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="/blog/DataFactory/how-to-get-adf-support-file/how-to-get-adf-support-file-1.png"></p>]]></content>
     
     
       

@@ -6,7 +6,7 @@
   <link href="https://jpaz-bigdata.github.io/blog/atom.xml" rel="self"/>
   
   <link href="https://jpaz-bigdata.github.io/blog/"/>
-  <updated>2023-05-24T04:37:23.951Z</updated>
+  <updated>2023-05-24T05:12:43.684Z</updated>
   <id>https://jpaz-bigdata.github.io/blog/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/"/>
     <id>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</id>
     <published>2023-05-23T00:00:00.000Z</published>
-    <updated>2023-05-24T04:37:23.951Z</updated>
+    <updated>2023-05-24T05:12:43.684Z</updated>
     
     <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="/blog/DataFactory/how-to-get-adf-support-file/how-to-get-adf-support-file-1.png"></p>]]></content>
     

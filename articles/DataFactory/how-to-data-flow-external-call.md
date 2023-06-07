@@ -5,6 +5,8 @@ tags:
   - Azure
   - Data Factory
   - data flow
+  - 外部呼び出し
+  - external-call
 ---
 
 

@@ -82,6 +82,78 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-DataFactory/how-to-data-flow-external-call" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="DataFactory/how-to-data-flow-external-call/" class="article-date">
+  <time datetime="2023-06-05T00:00:00.000Z" itemprop="datePublished">2023-06-05</time>
+</a>
+      
+    </div>
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="DataFactory/how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+目次
+概要
+検証環境
+手順
+REST API の準備
+Data Flow の準備
+外部呼び出しの設定
+REST のリンクサービスの作成
+呼び出し変換の設定
+Mapping の設定
+Output の設定
+
+
+外部呼ぶ出しの実行結果の確認
+
+
+ご紹介していない機能について
+行によって適用するAPI を変えたいとき
+Response をデータに加えたいとき
+
+
+
+概要Data Flowにおける外部呼び出し変換を使用すると、外部のREST API を行単位で適用することが可能です。この記事では、投稿日時点での機能を用いて、外部呼び出しの使用例をご紹介します。外部呼び出しの公式ドキュメント も併せてご確認ください。この記事では、一枚目にあるデータの各行のデータをbody として、外部のAPI にPOST します。最後に、その他の例についても簡単にはなりますが、記載いたします。
+POST する前のデ...
+        <p class="article-readmore">
+          <a href="DataFactory/how-to-data-flow-external-call/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/" data-id="cliu0ytvs00000njy19xvhz09" class="article-share-link">共有</a-->
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/data-flow/" rel="tag">data flow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/external-call/" rel="tag">external-call</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-DataFactory/how-to-get-adf-support-file" class="article article-type-post" itemscope itemprop="blogPost">
 
   <div class="article-inner">
@@ -120,7 +192,7 @@
     </div>
 
     <footer class="article-footer">
-      <!--a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/" data-id="cli1917qg00000np75k77dzc5" class="article-share-link">共有</a-->
+      <!--a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/" data-id="cliu0ytvx00010njy3lu7f22l" class="article-share-link">共有</a-->
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li></ul>
@@ -144,6 +216,10 @@
       <ul>
         
           <li>
+            <a href="DataFactory/how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
             <a href="DataFactory/how-to-get-adf-support-file/">Azure Data Factory のサポートファイルの取得方法</a>
           </li>
         
@@ -156,7 +232,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li></ul>  -->
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
       <ul class="tag-list"></ul>
     </div>
   </div>
@@ -167,7 +243,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2023/05/">2023 / 05</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2023/05/">2023 / 05</a></li></ul>
     </div>
   </div>
 
@@ -177,7 +253,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="tags/Azure/" style="font-size: 10px;">Azure</a> <a href="tags/Data-Factory/" style="font-size: 10px;">Data Factory</a> <a href="tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a>
+      <a href="tags/Azure/" style="font-size: 20px;">Azure</a> <a href="tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="tags/external-call/" style="font-size: 10px;">external-call</a> <a href="tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
     </div>
   </div>
 

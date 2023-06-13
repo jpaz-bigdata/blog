@@ -6,7 +6,7 @@
   <link href="https://jpaz-bigdata.github.io/blog/atom.xml" rel="self"/>
   
   <link href="https://jpaz-bigdata.github.io/blog/"/>
-  <updated>2023-05-24T05:12:43.684Z</updated>
+  <updated>2023-06-13T08:32:14.332Z</updated>
   <id>https://jpaz-bigdata.github.io/blog/</id>
   
   <author>
@@ -17,11 +17,44 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Data Flowの外部呼び出し変換方法の参考例</title>
+    <link href="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/"/>
+    <id>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/</id>
+    <published>2023-06-05T00:00:00.000Z</published>
+    <updated>2023-06-13T08:32:14.332Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><a href="#%E7%9B%AE%E6%AC%A1">目次</a></li><li><a href="#%E6%A6%82%E8%A6%81">概要</a></li><li><a href="#%E6%A4%9C%E8%A8%BC%E7%92%B0%E5%A2%83">検証環境</a></li><li><a href="#%E6%89%8B%E9%A0%86">手順</a><ul><li><a href="#rest-api-%E3%81%AE%E6%BA%96%E5%82%99">REST API の準備</a></li><li><a href="#data-flow-%E3%81%AE%E6%BA%96%E5%82%99">Data Flow の準備</a></li><li><a href="#%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E3%81%AE%E8%A8%AD%E5%AE%9A">外部呼び出しの設定</a><ul><li><a href="#rest-%E3%81%AE%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">REST のリンクサービスの作成</a></li><li><a href="#%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E5%A4%89%E6%8F%9B%E3%81%AE%E8%A8%AD%E5%AE%9A">呼び出し変換の設定</a></li><li><a href="#mapping-%E3%81%AE%E8%A8%AD%E5%AE%9A">Mapping の設定</a></li><li><a href="#output-%E3%81%AE%E8%A8%AD%E5%AE%9A">Output の設定</a></li></ul></li><li><a href="#%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B6%E5%87%BA%E3%81%97%E3%81%AE%E5%AE%9F%E8%A1%8C%E7%B5%90%E6%9E%9C%E3%81%AE%E7%A2%BA%E8%AA%8D">外部呼ぶ出しの実行結果の確認</a></li></ul></li><li><a href="#%E3%81%94%E7%B4%B9%E4%BB%8B%E3%81%97%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84%E6%A9%9F%E8%83%BD%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">ご紹介していない機能について</a><ul><li><a href="#%E8%A1%8C%E3%81%AB%E3%82%88%E3%81%A3%E3%81%A6%E9%81%A9%E7%94%A8%E3%81%99%E3%82%8Bapi-%E3%82%92%E5%A4%89%E3%81%88%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D">行によって適用するAPI を変えたいとき</a></li><li><a href="#response-%E3%82%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AB%E5%8A%A0%E3%81%88%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D">Response をデータに加えたいとき</a></li></ul></li></ul><h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>Data Flowにおける外部呼び出し変換を使用すると、外部のREST API を行単位で適用することが可能です。<br>この記事では、投稿日時点での機能を用いて、外部呼び出しの使用例をご紹介します。<br><a href="https://learn.microsoft.com/ja-jp/azure/data-factory/data-flow-external-call">外部呼び出しの公式ドキュメント</a> も併せてご確認ください。<br>この記事では、一枚目にあるデータの各行のデータをbody として、外部のAPI にPOST します。最後に、その他の例についても簡単にはなりますが、記載いたします。</p><p>POST する前のデータ<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-1.png">    </p><p>POST した後のデータ<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-2.png"></p><p>一行目の id=7065 の行をbody としてPOST した結果<br><code>&#123;&#39;id&#39;: 7065, &#39;title&#39;: &#39;Birth of a Nation, The&#39;, &#39;year&#39;: 1915, &#39;Rating&#39;: 6&#125;</code><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png"></p><h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul><li>Azure Data Factory V2 Data Flow</li><li>Azure Functions (REST API用)</li></ul><h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="REST-API-の準備"><a href="#REST-API-の準備" class="headerlink" title="REST API の準備"></a>REST API の準備</h2><p>Data Flow から外部呼び出しを行うAPI の準備をします。<br>Azure Functions を用いて、Data Flow から外部呼び出しどのように行われているか確認するため、受け取ったリクエストをログに吐き出すだけのAPI を作成します。  </p><p>ここでは、下記のようなpython での関数で検証を行います。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">import azure.functions as func</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main(req: func.HttpRequest) -&gt; func.HttpResponse:</span><br><span class="line">    logging.info(&#x27;Python HTTP trigger function processed a request.&#x27;)</span><br><span class="line">    logging.info(req)</span><br><span class="line">    logging.info(req.get_json())  # bodyの内容をログに吐き出す</span><br><span class="line">    logging.info(req.params)</span><br><span class="line">    </span><br><span class="line">    req_body = req.get_json()</span><br><span class="line">    movie_id = req_body.get(&#x27;id&#x27;)</span><br><span class="line">    logging.info(f&quot;movie&#x27;s id is &#123;movie_id&#125;&quot;)</span><br><span class="line">    return func.HttpResponse(</span><br><span class="line">            &quot;This HTTP triggered function executed successfully. &quot;,</span><br><span class="line">            status_code=200)</span><br></pre></td></tr></table></figure><p>保存を行い、関数URL の取得を行います。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/azurefunctions-1.png">  </p><h2 id="Data-Flow-の準備"><a href="#Data-Flow-の準備" class="headerlink" title="Data Flow の準備"></a>Data Flow の準備</h2><p>外部呼び出しを含むData Flow を作成しました。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-1.png">  </p><p>外部呼び出しは、スキーマ修飾子 の中にあります。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-2.png">  </p><h2 id="外部呼び出しの設定"><a href="#外部呼び出しの設定" class="headerlink" title="外部呼び出しの設定"></a>外部呼び出しの設定</h2><h3 id="REST-のリンクサービスの作成"><a href="#REST-のリンクサービスの作成" class="headerlink" title="REST のリンクサービスの作成"></a>REST のリンクサービスの作成</h3><p>ベースURL に、Azure Functions で取得したURLを入れ、接続を行います。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-3.png">  </p><h3 id="呼び出し変換の設定"><a href="#呼び出し変換の設定" class="headerlink" title="呼び出し変換の設定"></a>呼び出し変換の設定</h3><p>API をたたく際のリンクサービスやヘッダー、API のカスタマイズ等を行います。<br>本検証では各項目を以下のとおり設定しております。実行する API に応じて適宜設定いただきますようお願い致します。<br>現時点では、REST のみがサポートされています。</p><p>要求メソッド：POST<br>要求書式：JSON<br>要求JSON設定：未設定<br>応答書式：JSON<br>応答JSON設定：単一のドキュメント</p><p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-4.png">  </p><h3 id="Mapping-の設定"><a href="#Mapping-の設定" class="headerlink" title="Mapping の設定"></a>Mapping の設定</h3><p>ここでは、bodyに関する設定を行います。bodyに含めたい列とkey名を指定します。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-5.png">  </p><h3 id="Output-の設定"><a href="#Output-の設定" class="headerlink" title="Output の設定"></a>Output の設定</h3><p>POST したResponse に関して設定を行います。<br>今回は、POST が成功したかどうかの状態のみを設定します。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-6.png">  </p><h2 id="外部呼ぶ出しの実行結果の確認"><a href="#外部呼ぶ出しの実行結果の確認" class="headerlink" title="外部呼ぶ出しの実行結果の確認"></a>外部呼ぶ出しの実行結果の確認</h2><p>下記のように、データのプレビューから、最新の情報に更新を行うことで、実際にPOST をして結果を確認できます。status が200番が帰っており、API を正常に叩けていることが確認できました。  </p><p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-result-1.png"> </p><p>Azure Functions 側のログから、どのようにリクエストが飛んできたか確認できます。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png"></p><h1 id="ご紹介していない機能について"><a href="#ご紹介していない機能について" class="headerlink" title="ご紹介していない機能について"></a>ご紹介していない機能について</h1><p>上記のサンプルでは、使用していない項目についてご紹介します。<br>英語にはなりますが、詳細は、<a href="https://learn.microsoft.com/ja-jp/azure/data-factory/data-flow-external-call">外部呼び出しの公式ドキュメント</a> にございます動画をご覧ください。</p><h2 id="行によって適用するAPI-を変えたいとき"><a href="#行によって適用するAPI-を変えたいとき" class="headerlink" title="行によって適用するAPI を変えたいとき"></a>行によって適用するAPI を変えたいとき</h2><p>公式ドキュメントの動画内にあるとおり、呼び出し変換の設定 -&gt; 行の相対URL に対象の列を指定することで解決できます。<br>動画では、派生列変換を用いて、リンクサービスで指定したベースURL に続く相対URL のための列(ziplookup)を生成しております。<br>その後、外部呼び出し変換の行の相対URL にて列をしてしております。</p><p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-1.png"><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-2.png"> </p><h2 id="Response-をデータに加えたいとき"><a href="#Response-をデータに加えたいとき" class="headerlink" title="Response をデータに加えたいとき"></a>Response をデータに加えたいとき</h2><p>API のResponse をデータフローのデータの中に含めたい場合は、上述のOutPut の設定を行います。本文にチェックボックスを加えて、Response のkey名と型についての定義が必要です。</p><p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-3.png"><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-4.png"> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E7%9B%AE%E6%AC%A1&quot;&gt;目次&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A6%82%E8%A6%81&quot;&gt;概要&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A4%9C%E8%A8%BC%E7%92%B0%E</summary>
+      
+    
+    
+    
+    
+    <category term="Azure" scheme="https://jpaz-bigdata.github.io/blog/tags/Azure/"/>
+    
+    <category term="Data Factory" scheme="https://jpaz-bigdata.github.io/blog/tags/Data-Factory/"/>
+    
+    <category term="data flow" scheme="https://jpaz-bigdata.github.io/blog/tags/data-flow/"/>
+    
+    <category term="外部呼び出し" scheme="https://jpaz-bigdata.github.io/blog/tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/"/>
+    
+    <category term="external-call" scheme="https://jpaz-bigdata.github.io/blog/tags/external-call/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Azure Data Factory のサポートファイルの取得方法</title>
     <link href="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/"/>
     <id>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</id>
     <published>2023-05-23T00:00:00.000Z</published>
-    <updated>2023-05-24T05:12:43.684Z</updated>
+    <updated>2023-06-13T08:32:14.340Z</updated>
     
     <content type="html"><![CDATA[<p>課題解決に向けて、弊社の担当からサポートファイルのご提供をお願いすることがあります。<br>サポートファイルを取得するためには、Azure Data Factory Studio のパイプライン編集画面から取得できます。</p><p><img src="/blog/DataFactory/how-to-get-adf-support-file/how-to-get-adf-support-file-1.png"></p>]]></content>
     

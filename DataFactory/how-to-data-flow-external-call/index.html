@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Data Flowの外部呼び出し変換方法の参考例 | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目次 概要 検証環境 手順 REST API の準備 Data Flow の準備 外部呼び出しの設定 REST のリンクサービスの作成 呼び出し変換の設定 Mapping の設定 Output の設定   外部呼ぶ出しの実行結果の確認   ご紹介していない機能について 行によって適用するAPI を変えたいとき Response をデータに加えたいとき    概要Data Flowにおける外部呼び">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Flowの外部呼び出し変換方法の参考例">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="目次 概要 検証環境 手順 REST API の準備 Data Flow の準備 外部呼び出しの設定 REST のリンクサービスの作成 呼び出し変換の設定 Mapping の設定 Output の設定   外部呼ぶ出しの実行結果の確認   ご紹介していない機能について 行によって適用するAPI を変えたいとき Response をデータに加えたいとき    概要Data Flowにおける外部呼び">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/azurefunctions-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-5.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-6.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-result-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-4.png">
+<meta property="article:published_time" content="2023-06-05T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-13T08:32:14.332Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="data flow">
+<meta property="article:tag" content="外部呼び出し">
+<meta property="article:tag" content="external-call">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-1.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-data-flow-external-call" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Data Flowの外部呼び出し変換方法の参考例
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2023-06-05T00:00:00.000Z" itemprop="datePublished">2023-06-05</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+3ceb2faa-3014-5012-be6c-9506cb3ec729%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BData+Flow%E3%81%AE%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E5%A4%89%E6%8F%9B%E6%96%B9%E6%B3%95%E3%81%AE%E5%8F%82%E8%80%83%E4%BE%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-data-flow-external-call%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-data-flow-external-call.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-data-flow-external-call.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/" data-id="cliu0ytvs00000njy19xvhz09" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E7%9B%AE%E6%AC%A1">目次</a></li>
+<li><a href="#%E6%A6%82%E8%A6%81">概要</a></li>
+<li><a href="#%E6%A4%9C%E8%A8%BC%E7%92%B0%E5%A2%83">検証環境</a></li>
+<li><a href="#%E6%89%8B%E9%A0%86">手順</a><ul>
+<li><a href="#rest-api-%E3%81%AE%E6%BA%96%E5%82%99">REST API の準備</a></li>
+<li><a href="#data-flow-%E3%81%AE%E6%BA%96%E5%82%99">Data Flow の準備</a></li>
+<li><a href="#%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E3%81%AE%E8%A8%AD%E5%AE%9A">外部呼び出しの設定</a><ul>
+<li><a href="#rest-%E3%81%AE%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">REST のリンクサービスの作成</a></li>
+<li><a href="#%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E5%A4%89%E6%8F%9B%E3%81%AE%E8%A8%AD%E5%AE%9A">呼び出し変換の設定</a></li>
+<li><a href="#mapping-%E3%81%AE%E8%A8%AD%E5%AE%9A">Mapping の設定</a></li>
+<li><a href="#output-%E3%81%AE%E8%A8%AD%E5%AE%9A">Output の設定</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B6%E5%87%BA%E3%81%97%E3%81%AE%E5%AE%9F%E8%A1%8C%E7%B5%90%E6%9E%9C%E3%81%AE%E7%A2%BA%E8%AA%8D">外部呼ぶ出しの実行結果の確認</a></li>
+</ul>
+</li>
+<li><a href="#%E3%81%94%E7%B4%B9%E4%BB%8B%E3%81%97%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84%E6%A9%9F%E8%83%BD%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">ご紹介していない機能について</a><ul>
+<li><a href="#%E8%A1%8C%E3%81%AB%E3%82%88%E3%81%A3%E3%81%A6%E9%81%A9%E7%94%A8%E3%81%99%E3%82%8Bapi-%E3%82%92%E5%A4%89%E3%81%88%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D">行によって適用するAPI を変えたいとき</a></li>
+<li><a href="#response-%E3%82%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AB%E5%8A%A0%E3%81%88%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D">Response をデータに加えたいとき</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>Data Flowにおける外部呼び出し変換を使用すると、外部のREST API を行単位で適用することが可能です。<br>この記事では、投稿日時点での機能を用いて、外部呼び出しの使用例をご紹介します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/data-flow-external-call">外部呼び出しの公式ドキュメント</a> も併せてご確認ください。<br>この記事では、一枚目にあるデータの各行のデータをbody として、外部のAPI にPOST します。最後に、その他の例についても簡単にはなりますが、記載いたします。</p>
+<p>POST する前のデータ<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-1.png">    </p>
+<p>POST した後のデータ<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-2.png"></p>
+<p>一行目の id=7065 の行をbody としてPOST した結果<br><code>&#123;&#39;id&#39;: 7065, &#39;title&#39;: &#39;Birth of a Nation, The&#39;, &#39;year&#39;: 1915, &#39;Rating&#39;: 6&#125;</code><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png"></p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2 Data Flow</li>
+<li>Azure Functions (REST API用)</li>
+</ul>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="REST-API-の準備"><a href="#REST-API-の準備" class="headerlink" title="REST API の準備"></a>REST API の準備</h2><p>Data Flow から外部呼び出しを行うAPI の準備をします。<br>Azure Functions を用いて、Data Flow から外部呼び出しどのように行われているか確認するため、受け取ったリクエストをログに吐き出すだけのAPI を作成します。  </p>
+<p>ここでは、下記のようなpython での関数で検証を行います。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">import azure.functions as func</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main(req: func.HttpRequest) -&gt; func.HttpResponse:</span><br><span class="line">    logging.info(&#x27;Python HTTP trigger function processed a request.&#x27;)</span><br><span class="line">    logging.info(req)</span><br><span class="line">    logging.info(req.get_json())  # bodyの内容をログに吐き出す</span><br><span class="line">    logging.info(req.params)</span><br><span class="line">    </span><br><span class="line">    req_body = req.get_json()</span><br><span class="line">    movie_id = req_body.get(&#x27;id&#x27;)</span><br><span class="line">    logging.info(f&quot;movie&#x27;s id is &#123;movie_id&#125;&quot;)</span><br><span class="line">    return func.HttpResponse(</span><br><span class="line">            &quot;This HTTP triggered function executed successfully. &quot;,</span><br><span class="line">            status_code=200)</span><br></pre></td></tr></table></figure>
+
+<p>保存を行い、関数URL の取得を行います。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/azurefunctions-1.png">  </p>
+<h2 id="Data-Flow-の準備"><a href="#Data-Flow-の準備" class="headerlink" title="Data Flow の準備"></a>Data Flow の準備</h2><p>外部呼び出しを含むData Flow を作成しました。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-1.png">  </p>
+<p>外部呼び出しは、スキーマ修飾子 の中にあります。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-2.png">  </p>
+<h2 id="外部呼び出しの設定"><a href="#外部呼び出しの設定" class="headerlink" title="外部呼び出しの設定"></a>外部呼び出しの設定</h2><h3 id="REST-のリンクサービスの作成"><a href="#REST-のリンクサービスの作成" class="headerlink" title="REST のリンクサービスの作成"></a>REST のリンクサービスの作成</h3><p>ベースURL に、Azure Functions で取得したURLを入れ、接続を行います。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-3.png">  </p>
+<h3 id="呼び出し変換の設定"><a href="#呼び出し変換の設定" class="headerlink" title="呼び出し変換の設定"></a>呼び出し変換の設定</h3><p>API をたたく際のリンクサービスやヘッダー、API のカスタマイズ等を行います。<br>本検証では各項目を以下のとおり設定しております。実行する API に応じて適宜設定いただきますようお願い致します。<br>現時点では、REST のみがサポートされています。</p>
+<p>要求メソッド：POST<br>要求書式：JSON<br>要求JSON設定：未設定<br>応答書式：JSON<br>応答JSON設定：単一のドキュメント</p>
+<p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-4.png">  </p>
+<h3 id="Mapping-の設定"><a href="#Mapping-の設定" class="headerlink" title="Mapping の設定"></a>Mapping の設定</h3><p>ここでは、bodyに関する設定を行います。bodyに含めたい列とkey名を指定します。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-5.png">  </p>
+<h3 id="Output-の設定"><a href="#Output-の設定" class="headerlink" title="Output の設定"></a>Output の設定</h3><p>POST したResponse に関して設定を行います。<br>今回は、POST が成功したかどうかの状態のみを設定します。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-6.png">  </p>
+<h2 id="外部呼ぶ出しの実行結果の確認"><a href="#外部呼ぶ出しの実行結果の確認" class="headerlink" title="外部呼ぶ出しの実行結果の確認"></a>外部呼ぶ出しの実行結果の確認</h2><p>下記のように、データのプレビューから、最新の情報に更新を行うことで、実際にPOST をして結果を確認できます。status が200番が帰っており、API を正常に叩けていることが確認できました。  </p>
+<p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-result-1.png"> </p>
+<p>Azure Functions 側のログから、どのようにリクエストが飛んできたか確認できます。<br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-about-3.png"></p>
+<h1 id="ご紹介していない機能について"><a href="#ご紹介していない機能について" class="headerlink" title="ご紹介していない機能について"></a>ご紹介していない機能について</h1><p>上記のサンプルでは、使用していない項目についてご紹介します。<br>英語にはなりますが、詳細は、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/data-flow-external-call">外部呼び出しの公式ドキュメント</a> にございます動画をご覧ください。</p>
+<h2 id="行によって適用するAPI-を変えたいとき"><a href="#行によって適用するAPI-を変えたいとき" class="headerlink" title="行によって適用するAPI を変えたいとき"></a>行によって適用するAPI を変えたいとき</h2><p>公式ドキュメントの動画内にあるとおり、呼び出し変換の設定 -&gt; 行の相対URL に対象の列を指定することで解決できます。<br>動画では、派生列変換を用いて、リンクサービスで指定したベースURL に続く相対URL のための列(ziplookup)を生成しております。<br>その後、外部呼び出し変換の行の相対URL にて列をしてしております。</p>
+<p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-1.png"><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-2.png"> </p>
+<h2 id="Response-をデータに加えたいとき"><a href="#Response-をデータに加えたいとき" class="headerlink" title="Response をデータに加えたいとき"></a>Response をデータに加えたいとき</h2><p>API のResponse をデータフローのデータの中に含めたい場合は、上述のOutPut の設定を行います。本文にチェックボックスを加えて、Response のkey名と型についての定義が必要です。</p>
+<p><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-3.png"><br><img src="/blog/DataFactory/how-to-data-flow-external-call/dataflow-tips-4.png"> </p>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-data-flow-external-call.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../how-to-get-adf-support-file/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Azure Data Factory のサポートファイルの取得方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-get-adf-support-file/">Azure Data Factory のサポートファイルの取得方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2023 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

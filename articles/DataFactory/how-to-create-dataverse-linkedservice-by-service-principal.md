@@ -35,20 +35,20 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 [Power Platform 管理センターでアプリケーション ユーザーを管理する](https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user) も併せてご確認ください。 
 
 [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/home) にシステム管理者でアクセスします。  
-「環境」 から該当する環境を選択します。
+[環境] から該当する環境を選択します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-1.png)
 
 環境URL を取得しておきます。Azure Data Factory のリンクサービスを作る際の、サービスURLの一部になります。  
-「設定」 を選択します。
+[設定] を選択します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-2.png)
 
- 「ユーザーとアクセス許可」 を選択してから、「アプリケーション ユーザー」 を選択します。
+ [ユーザーとアクセス許可] を選択してから、[アプリケーション ユーザー] を選択します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-3.png)
 
 
- 「+ 新規アプリ ユーザー」 を選択し、新しいアプリ ユーザーの作成ページを開きます。  
- 「部署」 で、ドロップダウン リストから部署を選択した後、 「セキュリティ ロール」 の 「編集」 を選択します。  
- 新しいアプリケーション ユーザーに追加する選択した部署のセキュリティ ロールを選択できます。「システム管理者」 などのセキュリティ ロールを追加した後、「保存」 を選択します。
+ [+ 新規アプリ ユーザー] を選択し、新しいアプリ ユーザーの作成ページを開きます。  
+ [部署] で、ドロップダウン リストから部署を選択した後、 [セキュリティ ロール] の [編集] を選択します。  
+ 新しいアプリケーション ユーザーに追加する選択した部署のセキュリティ ロールを選択できます。[システム管理者] などのセキュリティ ロールを追加した後、[保存] を選択します。
 
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-4.png)
 
@@ -60,14 +60,14 @@ Azure AD 登録されているアプリケーションの情報を取得する�
 [!TIP]
 Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、[リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) を参考に登録をしてください。  
 
-Azure Portal より 「アプリの登録」から確認できます。今回は、Portals-blog が該当します。
+Azure Portal より [アプリの登録] から確認できます。今回は、Portals-blog が該当します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png)
 
 サービスプリンシパル認証に必要なIDとKeyを取得します。
-サービスプリンシパルID は、「アプリ情報」 -> 「概要」 -> 「アプリケーションID」 で取得できます。
+サービスプリンシパルID は、[アプリ情報] -> [概要] -> [アプリケーションID] で取得できます。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png)
 
-サービスプリンシパルKey は、「アプリ情報」 -> 「証明書とシークレット」 -> 「クライアントシークレット」 で取得もしくは作成できます。  
+サービスプリンシパルKey は、[アプリ情報] -> [証明書とシークレット] -> [クライアントシークレット] で取得もしくは作成できます。  
 [!IMPORTANT]
 作成直後を除き、クライアント シークレットの値を表示できません。ページを終了する前に、必ず保存してください。  
 

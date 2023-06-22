@@ -29,7 +29,8 @@ tags:
 
 ## Dataverse 側の接続権限付与
 
-Azure AD 登録済みアプリケーションから Dataverse にアクセスするには Office 365 側の アプリ ユーザーが必要です。
+Azure AD 登録済みアプリケーションから Dataverse にアクセスするには Office 365 側の アプリ ユーザーが必要です。  
+
 以下の手順で新しいアプリ ユーザーを作成します。   
 [Power Platform 管理センターでアプリケーション ユーザーを管理する](https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user) も併せてご確認ください。 
 
@@ -55,6 +56,10 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 
 ## Data Factory 側の接続情報取得 ( リンクサービスの作成 )
 Azure AD 登録されているアプリケーションの情報を取得する必要があります。  
+
+[!TIP]
+Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、[リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) を参考に登録をしてください。  
+
 Azure Portal より 「アプリの登録」から確認できます。今回は、Portals-blog が該当します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png)
 

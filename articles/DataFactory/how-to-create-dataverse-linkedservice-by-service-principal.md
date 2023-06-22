@@ -52,7 +52,7 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 
  [+ 新規アプリ ユーザー] を選択し、新しいアプリ ユーザーの作成ページを開きます。  
  [部署] で、ドロップダウン リストから部署を選択した後、 [セキュリティ ロール] の [編集] を選択します。  
- 新しいアプリケーション ユーザーに追加する選択した部署のセキュリティ ロールを選択できます。[システム管理者] などのセキュリティ ロールを追加した後、[保存] を選択します。
+ 新しいアプリケーション ユーザーに追加する、選択した部署におけるセキュリティ ロールを選択できます。[システム管理者] などのセキュリティ ロールを追加した後、[保存] を選択します。
 
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-4.png)
 
@@ -60,11 +60,11 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 
 ## Data Factory 側の接続情報取得 (リンクサービスの作成)
 Azure AD 登録されているアプリケーションの情報を取得する必要があります。  
+Azure Portal より [アプリの登録] から確認できます。  
 
 [!TIP]
-Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、[リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) を参考に登録をしてください。  
+Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、[リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) を参考にご登録ください。  
 
-Azure Portal より [アプリの登録] から確認できます。今回は、Portals-blog が該当します。  
 
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png)
 
@@ -74,13 +74,15 @@ Azure Portal より [アプリの登録] から確認できます。今回は、
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png)
 
 サービスプリンシパル キー は、[アプリ情報] -> [証明書とシークレット] -> [クライアントシークレット] で取得もしくは作成できます。  
+
 [!IMPORTANT]
-作成直後を除き、クライアント シークレットの値を表示できません。ページを終了する前に、必ず保存してください。  
+作成直後を除き、クライアント シークレットの値を後から確認できません。ページを終了する前に、必ず保存してください。  
 
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-key.png)
 
 
-得られた情報から、Azure Data Factory 上でリンクサービスの作成を行います。サービスURI は、Power Platform 管理センター で得られた環境URL を用います。必要に応じて、https://  などを加えてください。
+得られた情報から、Azure Data Factory 上でリンクサービスの作成を行います。サービスURI は、Power Platform 管理センター で得られた環境URL を用います。必要に応じて、https://  などを加えてください。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service.png)
 
 

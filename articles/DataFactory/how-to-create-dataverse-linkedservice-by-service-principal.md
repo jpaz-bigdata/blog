@@ -14,12 +14,13 @@ tags:
 - [検証環境](#検証環境)
 - [手順](#手順)
   - [Dataverse 側の接続権限付与](#dataverse-側の接続権限付与)
-  - [Data Factory 側の接続情報取得 ( リンクサービスの作成 )](#data-factory-側の接続情報取得--リンクサービスの作成-)
+  - [Data Factory 側の接続情報取得 (リンクサービスの作成)](#data-factory-側の接続情報取得-リンクサービスの作成)
+
 
 
 
 # 概要
-サービスプリンシパル認証を使った Data Factory とDataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverseに紐づくアプリケーションに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。  
+サービスプリンシパル認証を使った Data Factory と Dataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverse に紐づくアプリケーションに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。  
 [Dataverse コネクタの公式ドキュメント](https://learn.microsoft.com/ja-jp/azure/data-factory/connector-dynamics-crm-office-365?tabs=data-factory) も併せてご確認ください。  
 
 # 検証環境
@@ -35,14 +36,17 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 [Power Platform 管理センターでアプリケーション ユーザーを管理する](https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user) も併せてご確認ください。 
 
 [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/home) にシステム管理者でアクセスします。  
-[環境] から該当する環境を選択します。
+[環境] から該当する環境を選択します。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-1.png)
 
-環境URL を取得しておきます。Azure Data Factory のリンクサービスを作る際の、サービスURLの一部になります。  
-[設定] を選択します。
+環境 URL を取得しておきます。Azure Data Factory のリンクサービスを作る際の、サービス URL の一部になります。  
+[設定] を選択します。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-2.png)
 
- [ユーザーとアクセス許可] を選択してから、[アプリケーション ユーザー] を選択します。
+ [ユーザーとアクセス許可] を選択してから、[アプリケーション ユーザー] を選択します。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/power-platform-3.png)
 
 
@@ -54,20 +58,22 @@ Azure AD 登録済みアプリケーションから Dataverse にアクセスす
 
 
 
-## Data Factory 側の接続情報取得 ( リンクサービスの作成 )
+## Data Factory 側の接続情報取得 (リンクサービスの作成)
 Azure AD 登録されているアプリケーションの情報を取得する必要があります。  
 
 [!TIP]
 Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、[リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) を参考に登録をしてください。  
 
-Azure Portal より [アプリの登録] から確認できます。今回は、Portals-blog が該当します。
+Azure Portal より [アプリの登録] から確認できます。今回は、Portals-blog が該当します。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png)
 
-サービスプリンシパル認証に必要なIDとKeyを取得します。
-サービスプリンシパルID は、[アプリ情報] -> [概要] -> [アプリケーションID] で取得できます。
+サービスプリンシパル認証に必要な ID とキーを取得します。  
+サービスプリンシパル ID は、[アプリ情報] -> [概要] -> [アプリケーションID] で取得できます。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png)
 
-サービスプリンシパルKey は、[アプリ情報] -> [証明書とシークレット] -> [クライアントシークレット] で取得もしくは作成できます。  
+サービスプリンシパル キー は、[アプリ情報] -> [証明書とシークレット] -> [クライアントシークレット] で取得もしくは作成できます。  
 [!IMPORTANT]
 作成直後を除き、クライアント シークレットの値を表示できません。ページを終了する前に、必ず保存してください。  
 

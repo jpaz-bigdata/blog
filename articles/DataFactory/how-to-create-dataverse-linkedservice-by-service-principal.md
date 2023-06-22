@@ -19,7 +19,7 @@ tags:
 
 
 # 概要
-サービスプリンシパル認証を使った Data Factory とDataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、アプリに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。  
+サービスプリンシパル認証を使った Data Factory とDataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverseに紐づくアプリケーションに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。  
 [Dataverse コネクタの公式ドキュメント](https://learn.microsoft.com/ja-jp/azure/data-factory/connector-dynamics-crm-office-365?tabs=data-factory) も併せてご確認ください。  
 
 # 検証環境

@@ -48,7 +48,7 @@ tags:
 
 ## Data Factory 側の接続情報取得 ( リンクサービスの作成 )
 Azure AD 登録されているアプリケーションの情報を取得する必要があります。  
-Azure Portal より 「アプリの登録」から確認できます。今回は、Power Pages で作成された Portals-blog が該当します。
+Azure Portal より 「アプリの登録」から確認できます。今回は、Portals-blog が該当します。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png)
 
 サービスプリンシパル認証に必要なIDとKeyを取得します。

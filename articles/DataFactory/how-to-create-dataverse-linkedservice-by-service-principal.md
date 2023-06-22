@@ -9,6 +9,12 @@ tags:
 ---
 
 # 目次
+- [目次](#目次)
+- [概要](#概要)
+- [検証環境](#検証環境)
+- [手順](#手順)
+  - [Dataverse 側の接続権限付与](#dataverse-側の接続権限付与)
+  - [Data Factory 側の接続情報取得 ( リンクサービスの作成 )](#data-factory-側の接続情報取得--リンクサービスの作成-)
 
 
 
@@ -23,7 +29,8 @@ tags:
 
 ## Dataverse 側の接続権限付与
 
-アプリケーションユーザーの作成を行います。  
+Azure AD 登録済みアプリケーションから Dataverse にアクセスするには Office 365 側の アプリ ユーザーが必要です。
+以下の手順で新しいアプリ ユーザーを作成します。   
 [Power Platform 管理センターでアプリケーション ユーザーを管理する](https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user) も併せてご確認ください。 
 
 [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/home) にシステム管理者でアクセスします。  
@@ -55,8 +62,12 @@ Azure Portal より 「アプリの登録」から確認できます。今回は
 サービスプリンシパルID は、「アプリ情報」 -> 「概要」 -> 「アプリケーションID」 で取得できます。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png)
 
-サービスプリンシパルKey は、「アプリ情報」 -> 「証明書とシークレット」 -> 「クライアントシークレット」 で取得もしくは生成できます。
+サービスプリンシパルKey は、「アプリ情報」 -> 「証明書とシークレット」 -> 「クライアントシークレット」 で取得もしくは作成できます。  
+[!IMPORTANT]
+作成直後を除き、クライアント シークレットの値を表示できません。ページを終了する前に、必ず保存してください。  
+
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-key.png)
+
 
 得られた情報から、Azure Data Factory 上でリンクサービスの作成を行います。サービスURI は、Power Platform 管理センター で得られた環境URL を用います。必要に応じて、https://  などを加えてください。
 ![](./how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service.png)

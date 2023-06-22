@@ -1,33 +1,27 @@
 ---
-title: サービスプリンシパル認証によるAzure Data Factory と dataverse の接続方法
+title: サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法
 date: 2023-06-19 09:00:00
 tags:
   - Azure
   - Data Factory
-  - とataverse
+  - Dataverse 
   - リンクサービス
 ---
 
 # 目次
-- [目次](#目次)
-- [概要](#概要)
-- [検証環境](#検証環境)
-- [手順](#手順)
-  - [Data Verse 側の接続権限付与](#data-verse-側の接続権限付与)
-  - [Data Factory 側の接続情報取得 ( リンクサービスの作成 )](#data-factory-側の接続情報取得--リンクサービスの作成-)
+
 
 
 # 概要
-サービスプリンシパル認証を使った Data Factory とdataverse のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、アプリに関する情報の取得と dataverse 側でのアクセス権限の付与が必要になります。  
-[dataverse コネクタの公式ドキュメント](https://learn.microsoft.com/ja-jp/azure/data-factory/connector-dynamics-crm-office-365?tabs=data-factory) も併せてご確認ください。  
+サービスプリンシパル認証を使った Data Factory とDataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、アプリに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。  
+[Dataverse コネクタの公式ドキュメント](https://learn.microsoft.com/ja-jp/azure/data-factory/connector-dynamics-crm-office-365?tabs=data-factory) も併せてご確認ください。  
 
 # 検証環境
 - Azure Data Factory V2
-- Power Pages 
 
 # 手順
 
-## Data Verse 側の接続権限付与
+## Dataverse 側の接続権限付与
 
 アプリケーションユーザーの作成を行います。  
 [Power Platform 管理センターでアプリケーション ユーザーを管理する](https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user) も併せてご確認ください。 

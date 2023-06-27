@@ -55,3 +55,30 @@ tags:
 
 ![](./how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-1.png)   
 ![](./how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-2.png)   
+
+## パイプラインの変数からファイル名を渡す場合
+
+これまでは、Datasets のファイルパスに書き込む形で実現していましたが、アクティビティの設定から指定する方法で実行します。  
+流れとしては、Datasets のパラメータを作成した後、ファイルパスに作成したパラメータを指定します。Datasets のパラメータに対して、アクティビティの設定から、所望の複合式を渡します。その際に、変数として設定しておく方法をご紹介いたします。
+
+まず、[Datasets] の [パラメータ] から任意のパラメータを作成します。[規定値]は、空のままとします。
+
+![](./how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-1.png)
+
+[ファイルパス] の  [パイプライン式ビルダー] では、作成したパラメータを指定します。
+```
+@dataset().filename
+```
+
+パイプライン キャンパスの背景を選び、[変数] タブを選択して、変数を追加します。
+
+
+![](./how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-2.png)
+
+アクティビティを選択し、[シンク] タブより、[シンク データセット] の [データセットのプロパティ] の [値] に、先ほど設定した変数を記入します。変数を呼びだすためには、下記のように `variables()` を用います。  
+以上の操作で、シンクに出力されるファイル名に日付を加えることが可能です。
+```
+@variables('filename')
+```
+![](./how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-3.png)
+

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法 | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="シンクにデータを格納する際のファイル名に、実行時の日付やパイプライン実行 ID を加える方法をご紹介いたします。ファイル名を操作するために、データ関数 や システム変数 と concat 関数 を用いた文字列結合を行うことで実現できます。   また、公式ドキュメントの複合式の例 も併せてご確認ください。 検証環境 Azure Data Factory V2  手順日付をファイル名に含める場合実行時">
+<meta property="og:type" content="article">
+<meta property="og:title" content="シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="シンクにデータを格納する際のファイル名に、実行時の日付やパイプライン実行 ID を加える方法をご紹介いたします。ファイル名を操作するために、データ関数 や システム変数 と concat 関数 を用いた文字列結合を行うことで実現できます。   また、公式ドキュメントの複合式の例 も併せてご確認ください。 検証環境 Azure Data Factory V2  手順日付をファイル名に含める場合実行時">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-setting-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-setting-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-result-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-setting-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-3.png">
+<meta property="article:published_time" content="2023-06-22T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-07T06:19:24.051Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="システム変数">
+<meta property="article:tag" content="データ関数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-setting-1.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2023-06-22T00:00:00.000Z" itemprop="datePublished">2023-06-22</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+162c504d-f7ec-5779-90a7-f1f770726126%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5B%E3%82%B7%E3%83%B3%E3%82%AF%E3%81%AB%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%AB%E6%97%A5%E4%BB%98%E3%82%84%E3%83%91%E3%82%A4%E3%83%97%E3%83%A9%E3%82%A4%E3%83%B3%E5%AE%9F%E8%A1%8C+ID+%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B%E6%96%B9%E6%B3%95%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-add-variables-to-sink-filename-in-copy-activity%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-add-variables-to-sink-filename-in-copy-activity.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-add-variables-to-sink-filename-in-copy-activity.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/" data-id="cljs6sfvl00000npd2anue0ds" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>シンクにデータを格納する際のファイル名に、実行時の日付やパイプライン実行 ID を加える方法をご紹介いたします。<br>ファイル名を操作するために、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-expression-language-functions#date-functions">データ関数</a> や <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-system-variables">システム変数</a> と <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-expression-language-functions#concat">concat 関数</a> を用いた文字列結合を行うことで実現できます。  </p>
+<p>また、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-expression-language-functions#complex-expression-example">公式ドキュメントの複合式の例</a> も併せてご確認ください。</p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2</li>
+</ul>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="日付をファイル名に含める場合"><a href="#日付をファイル名に含める場合" class="headerlink" title="日付をファイル名に含める場合"></a>日付をファイル名に含める場合</h2><p>実行時における日付といった動的なコンテンツを追加するために、今回は [パイプライン式ビルダー] を用います。<br>[Datasets] の [ファイルパス] より、[動的なコンテンツの追加] を選択し、[パイプライン式ビルダー] を開きます。</p>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-setting-1.png">   </p>
+<p>実行時のタイムスタンプを得るためには、データ関数の <code>utcnow()</code> を使うことで実現できます。また、パイプラインを呼び出したトリガーの実行時刻が必要な場合は、<code>@pipeline().TriggerTime</code> を使うことで実現が可能です。<br>今回は、下記の複合式を用いました。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@concat(&#x27;Test-&#x27;, formatDateTime(utcnow(), &#x27;yyyy-MM-dd&#x27;), &#x27;.csv&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-setting-2.png">   </p>
+<p>下記が実行結果となります。設定したシンクである Azure Blob Storage 上のファイル名に日付の情報が含まれていることが確認いただけます。</p>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/date-result-1.png"> </p>
+<h2 id="パイプライン実行-ID-をファイル名に加える場合"><a href="#パイプライン実行-ID-をファイル名に加える場合" class="headerlink" title="パイプライン実行 ID をファイル名に加える場合"></a>パイプライン実行 ID をファイル名に加える場合</h2><p>同様に、[ファイルパス] より [パイプライン式ビルダー] を開きます。パイプラインの実行 ID を取得するには、システム変数の一つである <code>pipeline().RunId</code> を使うことで実現できます。<br>その他にも、ワークスペースの名前やパイプラインの名前を取得することも可能でございます。詳細は、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-system-variables">システム変数</a> をご覧ください。  </p>
+<p>今回は、下記の複合式を用いました。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@concat(&#x27;Test-&#x27;, pipeline().RunId, &#x27;.csv&#x27;)</span><br></pre></td></tr></table></figure>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-setting-1.png">   </p>
+<p>下記が実行結果となります。確かに、パイプラインの実行 ID がシンクである Azure Blob Storage 上のファイル名に含まれていることが確認できます。</p>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-1.png"><br><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/runid-result-2.png">   </p>
+<h2 id="パイプラインの変数からファイル名を渡す場合"><a href="#パイプラインの変数からファイル名を渡す場合" class="headerlink" title="パイプラインの変数からファイル名を渡す場合"></a>パイプラインの変数からファイル名を渡す場合</h2><p>これまでは、Datasets のファイルパスに書き込む形で実現していましたが、アクティビティの設定から指定する方法で実行します。<br>流れとしては、Datasets のパラメータを作成した後、ファイルパスに作成したパラメータを指定します。Datasets のパラメータに対して、アクティビティの設定から、所望の複合式を渡します。その際に、変数として設定しておく方法をご紹介いたします。</p>
+<p>まず、[Datasets] の [パラメータ] から任意のパラメータを作成します。[規定値] は、空のままとします。</p>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-1.png"></p>
+<p>[ファイルパス] の  [パイプライン式ビルダー] では、作成したパラメータを指定します。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@dataset().filename</span><br></pre></td></tr></table></figure>
+
+<p>パイプライン キャンパスの背景を選び、[変数] タブを選択して、変数を追加します。</p>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-2.png"></p>
+<p>アクティビティを選択し、[シンク] タブより、[シンク データセット] の [データセットのプロパティ] の [値] に、先ほど設定した変数を記入します。変数を呼びだすためには、下記のように <code>variables()</code> を用います。<br>以上の操作で、シンクに出力されるファイル名に日付を加えることが可能です。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@variables(&#x27;filename&#x27;)</span><br></pre></td></tr></table></figure>
+<p><img src="/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/variable-setting-3.png"></p>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../how-to-data-flow-external-call/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Data Flowの外部呼び出し変換方法の参考例</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-get-adf-support-file/">Azure Data Factory のサポートファイルの取得方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2023 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -4,21 +4,28 @@
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</loc>
     
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/</loc>
+    
+    <lastmod>2023-07-07</lastmod>
     
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/</loc>
     
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     
   </url>
   
 
   <url>
     <loc>https://jpaz-bigdata.github.io/blog</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -26,42 +33,56 @@
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/Azure/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/Data-Factory/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/</loc>
+    <lastmod>2023-07-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/</loc>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/data-flow/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/external-call/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/</loc>
-    <lastmod>2023-06-13</lastmod>
+    <lastmod>2023-07-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法 | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目次 概要 検証環境 手順 Dataverse 側の接続権限付与 Data Factory 側の接続情報取得 (リンクサービスの作成)    概要サービスプリンシパル認証を使った Data Factory と Dataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverse に紐づくアプリケーションに関する情報の取得と Dataverse 側でのアク">
+<meta property="og:type" content="article">
+<meta property="og:title" content="サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="目次 概要 検証環境 手順 Dataverse 側の接続権限付与 Data Factory 側の接続情報取得 (リンクサービスの作成)    概要サービスプリンシパル認証を使った Data Factory と Dataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverse に紐づくアプリケーションに関する情報の取得と Dataverse 側でのアク">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-key.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service.png">
+<meta property="article:published_time" content="2023-06-19T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-27T02:19:27.646Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="Dataverse">
+<meta property="article:tag" content="リンクサービス">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-1.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-create-dataverse-linkedservice-by-service-principal" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2023-06-19T00:00:00.000Z" itemprop="datePublished">2023-06-19</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+0e5b46a2-fa8e-593e-b16d-27a77e306185%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5B%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B7%E3%83%91%E3%83%AB%E8%AA%8D%E8%A8%BC%E3%81%AB%E3%82%88%E3%82%8BAzure+Data+Factory+%E3%81%A8+Dynamics+365+%28Microsoft+Dataverse%29+%E3%81%AE%E6%8E%A5%E7%B6%9A%E6%96%B9%E6%B3%95%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-create-dataverse-linkedservice-by-service-principal%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-create-dataverse-linkedservice-by-service-principal.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-create-dataverse-linkedservice-by-service-principal.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/" data-id="clkkj0wxu00010nnu72ww50vw" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E7%9B%AE%E6%AC%A1">目次</a></li>
+<li><a href="#%E6%A6%82%E8%A6%81">概要</a></li>
+<li><a href="#%E6%A4%9C%E8%A8%BC%E7%92%B0%E5%A2%83">検証環境</a></li>
+<li><a href="#%E6%89%8B%E9%A0%86">手順</a><ul>
+<li><a href="#dataverse-%E5%81%B4%E3%81%AE%E6%8E%A5%E7%B6%9A%E6%A8%A9%E9%99%90%E4%BB%98%E4%B8%8E">Dataverse 側の接続権限付与</a></li>
+<li><a href="#data-factory-%E5%81%B4%E3%81%AE%E6%8E%A5%E7%B6%9A%E6%83%85%E5%A0%B1%E5%8F%96%E5%BE%97-%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">Data Factory 側の接続情報取得 (リンクサービスの作成)</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>サービスプリンシパル認証を使った Data Factory と Dataverse  のリンクサービスの作成方法についてご紹介いたします。作成するにあたり、Dataverse に紐づくアプリケーションに関する情報の取得と Dataverse 側でのアクセス権限の付与が必要になります。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/connector-dynamics-crm-office-365?tabs=data-factory">Dataverse コネクタの公式ドキュメント</a> も併せてご確認ください。  </p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2</li>
+</ul>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="Dataverse-側の接続権限付与"><a href="#Dataverse-側の接続権限付与" class="headerlink" title="Dataverse 側の接続権限付与"></a>Dataverse 側の接続権限付与</h2><p>Azure AD 登録済みアプリケーションから Dataverse にアクセスするには Office 365 側の アプリ ユーザーが必要です。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/power-platform/admin/manage-application-users#create-an-application-user">Power Platform 管理センターでアプリケーション ユーザーを管理する</a> も併せてご確認ください。 </p>
+<p>以下の手順で新しいアプリ ユーザーを作成します。   </p>
+<p><a target="_blank" rel="noopener" href="https://admin.powerplatform.microsoft.com/home">Power Platform 管理センター</a> にシステム管理者でアクセスします。<br>[環境] から該当する環境を選択します。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-1.png"></p>
+<p>環境 URL を取得しておきます。Azure Data Factory のリンクサービスを作る際の、サービス URL の一部になります。<br>[設定] を選択します。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-2.png"></p>
+<p> [ユーザーとアクセス許可] を選択してから、[アプリケーション ユーザー] を選択します。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-3.png"></p>
+<p> [+ 新規アプリ ユーザー] を選択し、新しいアプリ ユーザーの作成ページを開きます。<br> [部署] で、ドロップダウン リストから部署を選択した後、 [セキュリティ ロール] の [編集] を選択します。<br> 新しいアプリケーション ユーザーに追加する、選択した部署におけるセキュリティ ロールを選択できます。[システム管理者] などのセキュリティ ロールを追加した後、[保存] を選択します。</p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/power-platform-4.png"></p>
+<h2 id="Data-Factory-側の接続情報取得-リンクサービスの作成"><a href="#Data-Factory-側の接続情報取得-リンクサービスの作成" class="headerlink" title="Data Factory 側の接続情報取得 (リンクサービスの作成)"></a>Data Factory 側の接続情報取得 (リンクサービスの作成)</h2><p>Azure AD 登録されているアプリケーションの情報を取得する必要があります。<br>Azure Portal より [アプリの登録] から確認できます。  </p>
+<p>[!TIP]<br>Azure AD にアプリケーションが登録されていない、もしくは、新たに登録が必要な場合は、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal">リソースにアクセスできる Azure Active Directory アプリケーションとサービス プリンシパルを作成する</a> を参考にご登録ください。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-1.png"></p>
+<p>サービスプリンシパル認証に必要な ID とキーを取得します。<br>サービスプリンシパル ID は、[アプリ情報] -&gt; [概要] -&gt; [アプリケーションID] で取得できます。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-id.png"></p>
+<p>サービスプリンシパル キー は、[アプリ情報] -&gt; [証明書とシークレット] -&gt; [クライアントシークレット] で取得もしくは作成できます。  </p>
+<p>[!IMPORTANT]<br>作成直後を除き、クライアント シークレットの値を後から確認できません。ページを終了する前に、必ず保存してください。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service-principal-key.png"></p>
+<p>得られた情報から、Azure Data Factory 上でリンクサービスの作成を行います。サービスURI は、Power Platform 管理センター で得られた環境URL を用います。必要に応じて、https://  などを加えてください。  </p>
+<p><img src="/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/linked-service-service.png"></p>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="../how-to-data-flow-external-call/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Data Flowの外部呼び出し変換方法の参考例</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</a>
+          </li>
+        
+          <li>
+            <a href="">サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-get-adf-support-file/">Azure Data Factory のサポートファイルの取得方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/Dataverse/" style="font-size: 10px;">Dataverse</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" style="font-size: 10px;">リンクサービス</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2023 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

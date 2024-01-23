@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Azure Data Factory を使用して SharePoint Online リストからデータをコピーする | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="注意：C. Azure Data Factory から SharePoint Online サイトへの接続の準備で説明されているSharePoint Online アプリのアクセス許可の機能はすでに廃止となっており、2026 年 4 月 2 日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。Azure ACS retirement in Microsoft">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure Data Factory を使用して SharePoint Online リストからデータをコピーする">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="注意：C. Azure Data Factory から SharePoint Online サイトへの接続の準備で説明されているSharePoint Online アプリのアクセス許可の機能はすでに廃止となっており、2026 年 4 月 2 日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。Azure ACS retirement in Microsoft">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-5.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-6.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Client-Secret-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Client-Secret-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Client-Secret-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/SharePoint-Access-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/SharePoint-Access-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-5.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-6.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-7.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-8.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-9.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-10.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-11.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-12.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-13.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-14.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-15.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-16.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-3.png">
+<meta property="article:published_time" content="2024-01-23T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-01-23T09:20:19.841Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="SharePoint Online">
+<meta property="article:tag" content="SharePoint Online リスト">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-1.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-connect-sp-online" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Azure Data Factory を使用して SharePoint Online リストからデータをコピーする
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2024-01-23T00:00:00.000Z" itemprop="datePublished">2024-01-23</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+3826a1d3-12b2-583a-a9f7-a8db4158a83a%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BAzure+Data+Factory+%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6+SharePoint+Online+%E3%83%AA%E3%82%B9%E3%83%88%E3%81%8B%E3%82%89%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E3%82%B3%E3%83%94%E3%83%BC%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/" data-id="clrq5bhvh00010npk9xt62j1m" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>注意：<br><a href="#c-azure-data-factory-%E3%81%8B%E3%82%89-sharepoint-online-%E3%82%B5%E3%82%A4%E3%83%88%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A%E3%81%AE%E6%BA%96%E5%82%99">C. Azure Data Factory から SharePoint Online サイトへの接続の準備</a>で説明されているSharePoint Online アプリのアクセス許可の機能はすでに廃止となっており、2026 年 4 月 2 日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/retirement-announcement-for-azure-acs">Azure ACS retirement in Microsoft 365 | Microsoft Learn</a></p>
+</blockquote>
+<!-- omit in toc -->
+<h2 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h2><ul>
+<li><a href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6">前提条件</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88">参考ドキュメント</a></li>
+<li><a href="#a-microsoft-id-%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%81%AB%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E7%99%BB%E9%8C%B2%E3%81%99%E3%82%8B">A. Microsoft ID プラットフォームにアプリケーションを登録する</a></li>
+<li><a href="#b-%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E3%82%B7%E3%83%BC%E3%82%AF%E3%83%AC%E3%83%83%E3%83%88%E3%81%AE%E8%BF%BD%E5%8A%A0">B. アプリケーションのクライアントシークレットの追加</a></li>
+<li><a href="#c-azure-data-factory-%E3%81%8B%E3%82%89-sharepoint-online-%E3%82%B5%E3%82%A4%E3%83%88%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A%E3%81%AE%E6%BA%96%E5%82%99">C. Azure Data Factory から SharePoint Online サイトへの接続の準備</a></li>
+<li><a href="#d-azure-data-factory-%E3%81%A7-sharepoint-online-%E3%83%AA%E3%82%B9%E3%83%88%E3%81%B8%E3%81%AE%E3%83%AA%E3%83%B3%E3%82%AF-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">D. Azure Data Factory で SharePoint Online リストへのリンク サービスを作成する</a></li>
+<li><a href="#e-azure-data-factory-%E3%81%A7-sharepoint-online-%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">E. Azure Data Factory で SharePoint Online リストのデータセットを作成する</a></li>
+<li><a href="#f-azure-data-factory-%E3%81%A7-blob-%E3%82%B9%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B8%E3%81%B8%E3%81%AE%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する</a></li>
+<li><a href="#g-azure-data-factory-%E3%81%A7%E3%82%B7%E3%83%B3%E3%82%AF%E3%81%AE-blob-%E3%82%B9%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B8%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">G. Azure Data Factory でシンクの Blob ストレージのデータセットを作成する</a></li>
+<li><a href="#h-azure-data-factory-%E3%81%A7-sharepoint-online-%E3%83%AA%E3%82%B9%E3%83%88%E3%81%8B%E3%82%89-blob-%E3%82%B9%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B8%E3%81%B8%E3%81%AE%E3%82%B3%E3%83%94%E3%83%BC-%E3%82%A2%E3%82%AF%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">H. Azure Data Factory で SharePoint Online リストから Blob ストレージへのコピー アクティビティを作成する</a></li>
+<li><a href="#i-%E3%83%91%E3%82%A4%E3%83%97%E3%83%A9%E3%82%A4%E3%83%B3%E3%81%AE%E5%AE%9F%E8%A1%8C%E3%81%A8%E7%B5%90%E6%9E%9C%E3%81%AE%E7%A2%BA%E8%AA%8D">I. パイプラインの実行と結果の確認</a></li>
+</ul>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>Azure Data Factory を作成済みであること。</li>
+<li>ストレージ アカウントを作成済みであること。</li>
+<li>SharePoint Online のリストを作成済みであること。</li>
+</ul>
+<h2 id="参考ドキュメント"><a href="#参考ドキュメント" class="headerlink" title="参考ドキュメント"></a>参考ドキュメント</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/connector-sharepoint-online-list?tabs=data-factory">SharePoint Online リストからデータをコピーする - Azure Data Factory &amp; Azure Synapse | Microsoft Learn</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/entra/identity-platform/quickstart-register-app">クイック スタート: Microsoft ID プラットフォームでアプリを登録する - Microsoft identity platform | Microsoft Learn</a></li>
+</ul>
+<h2 id="A-Microsoft-ID-プラットフォームにアプリケーションを登録する"><a href="#A-Microsoft-ID-プラットフォームにアプリケーションを登録する" class="headerlink" title="A. Microsoft ID プラットフォームにアプリケーションを登録する"></a>A. Microsoft ID プラットフォームにアプリケーションを登録する</h2><p><strong>1) クラウド アプリケーション管理者の権限を持つユーザで、<a target="_blank" rel="noopener" href="https://entra.microsoft.com/#home">Microsoft - Microsoft Entra 管理センター</a>にアクセスします</strong><br>複数のテナントにアクセスできる場合は、上部のメニューの [設定] アイコンを使い、<br>[ディレクトリとサブスクリプション] メニューから SharePoint Online が存在するテナントに切り替えます。<br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-1.png"></p>
+<p><strong>2) [ID] &gt; [アプリケーション] &gt; [アプリの登録] に移動し、 [新規登録] を選びます</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-2.png"></p>
+<p><strong>3) アプリケーションの表示名を入力します</strong><br>表示名はサインイン時など、アプリケーションのユーザーがアプリを使用するときに表示されることがあります。  表示名はいつでも変更できます。<br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-3.png"></p>
+<p><strong>4) [サポートされているアカウントの種類] では SharePoint Online に接続できるユーザー（アプリケーションを含む）を指定します</strong><br>各項目の説明は <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/entra/identity-platform/quickstart-register-app#register-an-application">こちらのドキュメント</a>をご覧ください。<br>[リダイレクト URI (省略可能)] などその他の項目の入力は今回のケースでは不要です。<br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-4.png"></p>
+<p><strong>5) [登録] をクリックして、アプリ登録を完了します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-5.png"></p>
+<p>登録が完了すると、Microsoft Entra 管理センターにアプリの登録の [概要] ペインが表示されます。<br>[アプリケーション (クライアント) ID] の値を確認します。 この値は、”クライアント ID” とも呼ばれ、<br>Microsoft ID プラットフォーム内のアプリケーションを一意に識別します。</p>
+<p><strong>6) この画面で表示される [アプリケーション（クライアント） ID] 、 [ディレクトリ（テナント） ID] をメモしておきます</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Entra-Setting-6.png"></p>
+<h2 id="B-アプリケーションのクライアントシークレットの追加"><a href="#B-アプリケーションのクライアントシークレットの追加" class="headerlink" title="B. アプリケーションのクライアントシークレットの追加"></a>B. アプリケーションのクライアントシークレットの追加</h2><p><strong>1) 先ほどの画面から [証明書とシークレット] &gt; [クライアント シークレット] &gt; [新しいクライアント シークレット] を選択します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Client-Secret-1.png"></p>
+<p><strong>2) クライアント シークレットの説明を追加します</strong><br>シークレットの有効期限を選択するか、カスタムの有効期間を指定します。<br>[追加] を選択します。<br><img src="/blog/DataFactory/how-to-connect-sp-online/Client-Secret-2.png"></p>
+<p><strong>3) クライアント アプリケーションのコードで使用できるようにシークレットの値をコピーしておきます</strong><br>    <strong>このページから離れるとこのシークレットの値は 二度と表示されません。</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Client-Secret-3.png"></p>
+<h2 id="C-Azure-Data-Factory-から-SharePoint-Online-サイトへの接続の準備"><a href="#C-Azure-Data-Factory-から-SharePoint-Online-サイトへの接続の準備" class="headerlink" title="C. Azure Data Factory から SharePoint Online サイトへの接続の準備"></a>C. Azure Data Factory から SharePoint Online サイトへの接続の準備</h2><p><strong>1) 接続先の SharePoint Online でアクセス許可を設定します</strong><br>https://[your_site_url]/_layouts/15/appinv.aspx を開きます。<br>([your_site_url] の部分はお使いの SharePoint Online の URL に置き換えてください。)</p>
+<p>先ほどの手順でメモしたアプリケーション ID を空欄に入力します。<br>[参照] をクリックすると設定した SharePoint Online の表示名が自動で入力されます。<br>その他の項目は以下のように入力します。</p>
+<table>
+<thead>
+<tr>
+<th align="left">設定項目</th>
+<th align="left">入力内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">アプリドメイン</td>
+<td align="left">localhost.com （今回のケースではダミーを使用します）</td>
+</tr>
+<tr>
+<td align="left">リダイレクト URL</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.localhost.com/">https://www.localhost.com</a>（今回のケースではダミーを使用します）</td>
+</tr>
+</tbody></table>
+<p>権限の要求 XML には以下の内容をコピー &amp; ペーストで入力します。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">AppPermissionRequests</span> <span class="attr">AllowAppOnlyPolicy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">AppPermissionRequest</span> <span class="attr">Scope</span>=<span class="string">&quot;http://sharepoint/content/sitecollection/web&quot;</span> <span class="attr">Right</span>=<span class="string">&quot;Read&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">AppPermissionRequests</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2) [作成] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/SharePoint-Access-1.png"></p>
+<p><strong>3) [信頼する] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/SharePoint-Access-2.png"></p>
+<h2 id="D-Azure-Data-Factory-で-SharePoint-Online-リストへのリンク-サービスを作成する"><a href="#D-Azure-Data-Factory-で-SharePoint-Online-リストへのリンク-サービスを作成する" class="headerlink" title="D. Azure Data Factory で SharePoint Online リストへのリンク サービスを作成する"></a>D. Azure Data Factory で SharePoint Online リストへのリンク サービスを作成する</h2><p><strong>1) Azure Data Factory の [管理] メニューに移動し、 [リンク サービス] を選択して、 [新規] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-1.png"></p>
+<p><strong>2) SharePoint を検索し、[SharePoint Online リスト] コネクタを選択します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-2.png"></p>
+<p><strong>3) 入力フィールドに情報を入力して、テスト接続を行います</strong><br>サイト URL には接続対象の SharePoint Online の URL を入力します。<br>テナント ID、サービスプリンシパル ID、サービスプリンシパル キーには前の手順で登録した<br>テナント ID、アプリケーション ID、シークレット値をそれぞれ記入します。<br>入力が済んだら [テスト接続] をクリックして、 SharePoint Online との接続を確認します。<br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-3.png"></p>
+<p>接続が成功したら [適用] をクリックしてリンク サービスを作成します。</p>
+<h2 id="E-Azure-Data-Factory-で-SharePoint-Online-リストのデータセットを作成する"><a href="#E-Azure-Data-Factory-で-SharePoint-Online-リストのデータセットを作成する" class="headerlink" title="E. Azure Data Factory で SharePoint Online リストのデータセットを作成する"></a>E. Azure Data Factory で SharePoint Online リストのデータセットを作成する</h2><p><strong>1) [作成者] アイコン &gt; [データセット] &gt; […] メニュー &gt; [新しいデータセット] から接続先（SharePoint）のデータセットを作成します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-4.png"></p>
+<p><strong>2) [SharePoint Online リスト] を選択して、[続行] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-5.png"></p>
+<p><strong>3) 入力フィールドに必要な情報を入力して [OK] を選択します</strong><br>任意の名前を入力し、先ほどの手順で作成したリンクサービスを選択します。<br>さらにコピー対象となる SharePoint Online のリスト名を選択して [OK] をクリックします。<br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-6.png"></p>
+<h2 id="F-Azure-Data-Factory-で-Blob-ストレージへのリンクサービスを作成する"><a href="#F-Azure-Data-Factory-で-Blob-ストレージへのリンクサービスを作成する" class="headerlink" title="F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する"></a>F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する</h2><blockquote>
+<p>今回の例では出力先を Azure BLOB ストレージの任意のディレクトリとします。<br>ストレージの作成方法等については、[ストレージ アカウントを作成する] (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/storage/common/storage-account-create?tabs=azure-portal)%E3%82%92%E3%81%94%E8%A6%A7%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82">https://learn.microsoft.com/ja-jp/azure/storage/common/storage-account-create?tabs=azure-portal)をご覧ください。</a></p>
+</blockquote>
+<p><strong>1) Azure Data Factory の [管理] タブに移動し、[リンク サービス] を選択して、 [新規] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-7.png"></p>
+<p><strong>2) Azure BLOB ストレージを選択し、[続行] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-8.png"></p>
+<p><strong>3) 必要な情報を入力し、テスト接続ができることを確認します</strong><br>任意の名前を入力し、出力先となるストレージ アカウントを選択します。<br>テスト接続を行い、成功したら、[作成] をクリックします。<br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-9.png"></p>
+<h2 id="G-Azure-Data-Factory-でシンクの-Blob-ストレージのデータセットを作成する"><a href="#G-Azure-Data-Factory-でシンクの-Blob-ストレージのデータセットを作成する" class="headerlink" title="G. Azure Data Factory でシンクの Blob ストレージのデータセットを作成する"></a>G. Azure Data Factory でシンクの Blob ストレージのデータセットを作成する</h2><p><strong>1) [作成者] アイコン &gt; データセット右の […] メニュー &gt; 新しいデータセットから接続先のデータセットを作成します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-10.png"></p>
+<p><strong>2) Azure Blob ストレージを選択して、 [続行] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-11.png"></p>
+<p><strong>3) 出力形式は “DelimitedText” を選択して、 [続行] をクリックします</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-12.png"></p>
+<p><strong>4) 必要な情報を入力し、データセットを作成します</strong><br>任意の名前を入力し、先の手順で作成したリンク サービスを選びます。<br>ファイルパスは任意の Blob ストレージのパスを入力します。<br>[先頭行をヘッダーとして] のチェックはそのままで [OK] をクリックします。<br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-13.png"></p>
+<h2 id="H-Azure-Data-Factory-で-SharePoint-Online-リストから-Blob-ストレージへのコピー-アクティビティを作成する"><a href="#H-Azure-Data-Factory-で-SharePoint-Online-リストから-Blob-ストレージへのコピー-アクティビティを作成する" class="headerlink" title="H. Azure Data Factory で SharePoint Online リストから Blob ストレージへのコピー アクティビティを作成する"></a>H. Azure Data Factory で SharePoint Online リストから Blob ストレージへのコピー アクティビティを作成する</h2><p><strong>1) 新規にパイプラインを作成し、アクティビティの [移動と変換] から [データのコピー] アクティビティを選び、キャンバスにドラッグ &amp; ドロップで配置します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-14.png"></p>
+<p><strong>2) ソース タブで先ほど作成した、SharePoint Online のデータセットを選びます</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-15.png"></p>
+<p><strong>3) 次にシンク タブで先ほど作成した Blob ストレージのデータセットを選びます</strong><br>また、必要に応じて他の項目も設定します。<br><img src="/blog/DataFactory/how-to-connect-sp-online/ADF-Setting-16.png"></p>
+<h2 id="I-パイプラインの実行と結果の確認"><a href="#I-パイプラインの実行と結果の確認" class="headerlink" title="I. パイプラインの実行と結果の確認"></a>I. パイプラインの実行と結果の確認</h2><p><strong>1) 上記の設定が完了したら、[トリガーの追加] &gt; [今すぐトリガー] で実行します</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-1.png"></p>
+<p><strong>2) 画面一番左の [モニター] メニューの [パイプライン実行] で先ほどトリガー実行したパイプラインの結果を確認することが可能です</strong><br><img src="/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-2.png"></p>
+<p>また、シンクの Blob ストレージで出力されたファイルを確認することも可能です。<br><img src="/blog/DataFactory/how-to-connect-sp-online/Pipeline-Result-3.png"></p>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/SharePoint-Online/" rel="tag">SharePoint Online</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" rel="tag">SharePoint Online リスト</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-connect-sp-online.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">Azure Data Factory を使用して SharePoint Online リストからデータをコピーする</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-create-dataverse-linkedservice-by-service-principal/">サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-get-adf-support-file/">Azure Data Factory のサポートファイルの取得方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online/" rel="tag">SharePoint Online</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" rel="tag">SharePoint Online リスト</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/Dataverse/" style="font-size: 10px;">Dataverse</a> <a href="../../tags/SharePoint-Online/" style="font-size: 10px;">SharePoint Online</a> <a href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" style="font-size: 10px;">SharePoint Online リスト</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" style="font-size: 10px;">リンクサービス</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2024 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

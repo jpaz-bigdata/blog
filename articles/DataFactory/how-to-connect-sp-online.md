@@ -23,8 +23,8 @@ tags:
 - [D. Azure Data Factory で SharePoint Online リストへのリンク サービスを作成する](#d-azure-data-factory-で-sharepoint-online-リストへのリンク-サービスを作成する)
 - [E. Azure Data Factory で SharePoint Online リストのデータセットを作成する](#e-azure-data-factory-で-sharepoint-online-リストのデータセットを作成する)
 - [F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する](#f-azure-data-factory-で-blob-ストレージへのリンクサービスを作成する)
-- [G. Azure Data Factory でシンクの Blob ファイルのデータセットを作成する](#g-azure-data-factory-でシンクの-blob-ファイルのデータセットを作成する)
-- [H. Azure Data Factory で SharePoint Online リストから Blob ファイルへのコピー アクティビティを作成する](#h-azure-data-factory-で-sharepoint-online-リストから-blob-ファイルへのコピー-アクティビティを作成する)
+- [G. Azure Data Factory でシンクの Blob ストレージのデータセットを作成する](#g-azure-data-factory-でシンクの-blob-ストレージのデータセットを作成する)
+- [H. Azure Data Factory で SharePoint Online リストから Blob ストレージへのコピー アクティビティを作成する](#h-azure-data-factory-で-sharepoint-online-リストから-blob-ストレージへのコピー-アクティビティを作成する)
 - [I. パイプラインの実行と結果の確認](#i-パイプラインの実行と結果の確認)
 
 ## 前提条件
@@ -158,7 +158,7 @@ __3) 必要な情報を入力し、テスト接続ができることを確認し
 テスト接続を行い、成功したら、[作成] をクリックします。  
 ![](./how-to-connect-sp-online/ADF-Setting-9.png)
 
-## G. Azure Data Factory でシンクの Blob ファイルのデータセットを作成する
+## G. Azure Data Factory でシンクの Blob ストレージのデータセットを作成する
 
 __1) [作成者] アイコン > データセット右の […] メニュー > 新しいデータセットから接続先のデータセットを作成します__  
 ![](./how-to-connect-sp-online/ADF-Setting-10.png)
@@ -175,7 +175,7 @@ __4) 必要な情報を入力し、データセットを作成します__
 [先頭行をヘッダーとして] のチェックはそのままで [OK] をクリックします。
 ![](./how-to-connect-sp-online/ADF-Setting-13.png)
 
-## H. Azure Data Factory で SharePoint Online リストから Blob ファイルへのコピー アクティビティを作成する
+## H. Azure Data Factory で SharePoint Online リストから Blob ストレージへのコピー アクティビティを作成する
 
 __1) 新規にパイプラインを作成し、アクティビティの [移動と変換] から [データのコピー] アクティビティを選び、キャンバスにドラッグ & ドロップで配置します__  
 ![](./how-to-connect-sp-online/ADF-Setting-14.png)

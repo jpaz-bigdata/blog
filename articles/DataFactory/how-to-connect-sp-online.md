@@ -9,7 +9,7 @@ tags:
 ---
 
 >注意：
->[C. Azure Data FactoryからSharePoint Onlineサイトへの接続の準備](#c-azure-data-factoryからsharepoint-onlineサイトへの接続の準備)で説明されているSharePointアプリのアクセス許可の機能はすでに廃止となり、2026年4月2日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。
+>[C. Azure Data FactoryからSharePoint Onlineサイトへの接続の準備](#c-azure-data-factoryからsharepoint-onlineサイトへの接続の準備)で説明されているSharePointアプリのアクセス許可の機能はすでに廃止となっており、2026年4月2日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。
 >[Azure ACS retirement in Microsoft 365 | Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/retirement-announcement-for-azure-acs)
 
 <!-- omit in toc -->

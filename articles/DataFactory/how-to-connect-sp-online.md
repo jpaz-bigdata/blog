@@ -1,5 +1,5 @@
 ---
-title: Azure Data Factoryを使用して SharePoint Onlineリストからデータをコピーする
+title: Azure Data Factory を使用して SharePoint Online リストからデータをコピーする
 date: 2024-01-23 09:00:00
 tags:
   - Azure
@@ -9,7 +9,7 @@ tags:
 ---
 
 >注意：
->[C. Azure Data Factory から SharePoint Online サイトへの接続の準備](#c-azure-data-factory-から-sharepoint-online-サイトへの接続の準備)で説明されているSharePoint アプリのアクセス許可の機能はすでに廃止となっており、2026 年 4 月 2 日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。
+>[C. Azure Data Factory から SharePoint Online サイトへの接続の準備](#c-azure-data-factory-から-sharepoint-online-サイトへの接続の準備)で説明されているSharePoint Onlineアプリのアクセス許可の機能はすでに廃止となっており、2026 年 4 月 2 日には完全に使用できなくなります。詳しくは以下のドキュメントをご覧ください（英語のみ）。
 >[Azure ACS retirement in Microsoft 365 | Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/retirement-announcement-for-azure-acs)
 
 <!-- omit in toc -->
@@ -24,13 +24,13 @@ tags:
 - [E. Azure Data Factory で SharePoint Online リストのデータセットを作成する](#e-azure-data-factory-で-sharepoint-online-リストのデータセットを作成する)
 - [F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する](#f-azure-data-factory-で-blob-ストレージへのリンクサービスを作成する)
 - [G. Azure Data Factory でシンクの Blob ファイルのデータセットを作成する](#g-azure-data-factory-でシンクの-blob-ファイルのデータセットを作成する)
-- [H. Data Factory で SharePoint リストから Blob ファイルへのデータコピーアクティビティを作成する](#h-data-factory-で-sharepoint-リストから-blob-ファイルへのデータコピーアクティビティを作成する)
+- [H. Azure Data Factory で SharePoint Onlineリストから Blob ファイルへのデータコピーアクティビティを作成する](#h-azure-data-factory-で-sharepoint-onlineリストから-blob-ファイルへのデータコピーアクティビティを作成する)
 - [I. パイプラインの実行と結果の確認](#i-パイプラインの実行と結果の確認)
 
 ## 前提条件
 
 - Azure Data Factory を作成済みであること。
-- ストレージアカウントを作成済みであること。
+- ストレージ アカウントを作成済みであること。
 - SharePoint Online のリストを作成済みであること。
 
 ## 参考ドキュメント
@@ -40,23 +40,23 @@ tags:
 
 ## A. Microsoft ID プラットフォームにアプリケーション (SharePoint Online) を登録する
 
-まずは接続先となる SharePoint をアプリケーションとして登録し、Data Factory から接続する準備をします。
+まずは接続先となる SharePoint Online をアプリケーションとして登録し、Azure Data Factory から接続する準備をします。
 
 __1) クラウド アプリケーション管理者の権限を持つユーザで、[Microsoft - Microsoft Entra 管理センター](https://entra.microsoft.com/#home)にアクセスします__  
 複数のテナントにアクセスできる場合は、上部のメニューの [設定] アイコンを使い、
-[ディレクトリとサブスクリプション] メニューから SharePoint を登録するテナントに切り替えます。
+[ディレクトリとサブスクリプション] メニューから SharePoint Online を登録するテナントに切り替えます。
 ![](./how-to-connect-sp-online/Entra-Setting-1.png)
 
 __2) [ID] > [アプリケーション] > [アプリの登録] に移動し、 [新規登録] を選びます__  
 ![](./how-to-connect-sp-online/Entra-Setting-2.png)
 
-__3) Data Factory の接続先となる SharePoint の表示名を入力します__  
+__3) Azure Data Factory の接続先となる SharePoint Onlineの表示名を入力します__  
 表示名はサインイン時など、アプリケーションのユーザーがアプリを使用するときに表示されることがあります。  表示名はいつでも変更できます。  
 ![](./how-to-connect-sp-online/Entra-Setting-3.png)
 
-__4) [サポートされているアカウントの種類] では SharePoint に接続することのできるユーザー（アプリケーションを含む）を指定します__  
+__4) [サポートされているアカウントの種類] では SharePoint Onlineに接続することのできるユーザー（アプリケーションを含む）を指定します__  
 各項目の説明は [こちらのドキュメント] (https://learn.microsoft.com/ja-jp/entra/identity-platform/quickstart-register-app#register-an-application)をご覧ください。
-テナントをまたがって Data Factory から SharePoint に接続を行うような場合は、マルチテナントの選択肢を選んでください。
+テナントをまたがって Azure Data Factory から SharePoint Onlineに接続を行うような場合は、マルチテナントの選択肢を選んでください。
 [リダイレクト URI (省略可能)] などその他の項目の入力は今回のケースでは不要です。
 ![](./how-to-connect-sp-online/Entra-Setting-4.png)
 
@@ -122,10 +122,10 @@ __2) SharePoint を検索し、[SharePoint Online リスト] コネクタを選�
 ![](./how-to-connect-sp-online/ADF-Setting-2.png)
 
 __3) 入力フィールドに情報を入力して、テスト接続を行います__  
-サイト URL には接続対象の SharePoint サイトの URL を入力します。
+サイト URL には接続対象の SharePoint Onlineの URL を入力します。
 テナント ID、サービスプリンシパル ID、サービスプリンシパル キーには前の手順で登録した
 テナント ID、アプリケーション ID、シークレット値をそれぞれ記入します。
-入力が済んだら [テスト接続] をクリックして、 SharePoint との接続を確認します。
+入力が済んだら [テスト接続] をクリックして、 SharePoint Onlineとの接続を確認します。
 ![](./how-to-connect-sp-online/ADF-Setting-3.png)
 
 接続が成功したら [適用] をクリックしてリンク サービスを作成します。
@@ -140,7 +140,7 @@ __2) [SharePoint Online リスト] を選択して、[続行] をクリックし
 
 __3) 入力フィールドに必要な情報を入力して [OK] を選択します__  
 任意の名前を入力し、先ほどの手順で作成したリンクサービスを選択します。
-さらにコピー対象となる SharePoint のリスト名を選択して [OK] をクリックします。  
+さらにコピー対象となる SharePoint Onlineのリスト名を選択して [OK] をクリックします。  
 ![](./how-to-connect-sp-online/ADF-Setting-6.png)
 
 ## F. Azure Data Factory で Blob ストレージへのリンクサービスを作成する
@@ -157,7 +157,7 @@ __2) Azure BLOB ストレージを選択し、[続行] をクリックします_
 
 
 __3) 必要な情報を入力し、テスト接続ができることを確認します__  
-任意の名前を入力し、出力先となるストレージアカウントを選択します。
+任意の名前を入力し、出力先となるストレージ アカウントを選択します。
 テスト接続を行い、成功したら、[作成] をクリックします。  
 ![](./how-to-connect-sp-online/ADF-Setting-9.png)
 
@@ -178,12 +178,12 @@ __4) 必要な情報を入力し、データセットを作成します__
 [先頭行をヘッダーとして] のチェックはそのままで [OK] をクリックします。
 ![](./how-to-connect-sp-online/ADF-Setting-13.png)
 
-## H. Data Factory で SharePoint リストから Blob ファイルへのデータコピーアクティビティを作成する
+## H. Azure Data Factory で SharePoint Onlineリストから Blob ファイルへのデータコピーアクティビティを作成する
 
 __1) 新規にパイプラインを作成し、アクティビティの [移動と変換] から [データのコピー] アクティビティを選び、キャンバスにドラッグ & ドロップで配置します__  
 ![](./how-to-connect-sp-online/ADF-Setting-14.png)
 
-__2) ソース タブで先ほど作成した、SharePoint のデータセットを選びます__  
+__2) ソース タブで先ほど作成した、SharePoint Onlineのデータセットを選びます__  
 ![](./how-to-connect-sp-online/ADF-Setting-15.png)
 
 __3) 次にシンク タブで先ほど作成した Blob ストレージのデータセットを選びます__  

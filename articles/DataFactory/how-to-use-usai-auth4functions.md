@@ -1,6 +1,6 @@
 ---
 title: Data Flowの外部呼び出し変換方法の参考例
-date: 2023-06-05 09:00:00
+date: 2024-05-30 09:00:00
 tags:
   - Azure
   - Data Factory

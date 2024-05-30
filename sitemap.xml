@@ -2,44 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/</loc>
+    
+    <lastmod>2024-05-30</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</loc>
     
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-data-flow-external-call/</loc>
     
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-create-dataverse-linkedservice-by-service-principal/</loc>
     
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/</loc>
     
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/</loc>
     
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     
   </url>
   
 
   <url>
     <loc>https://jpaz-bigdata.github.io/blog</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -47,84 +54,98 @@
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/Azure/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/Data-Factory/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/SharePoint-Online/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/Dataverse/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/data-flow/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/external-call/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/</loc>
-    <lastmod>2024-01-23</lastmod>
+    <lastmod>2024-05-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/tags/Azure-Functions/</loc>
+    <lastmod>2024-05-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/</loc>
+    <lastmod>2024-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

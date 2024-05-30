@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Data Flowの外部呼び出し変換方法の参考例 | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="この記事では、システム割り当てマネージド ID を使用して Azure Data Factory から Azure 関数を呼び出す方法について説明します。 検証環境 Azure Data Factory V2 Data Flow Azure Functions   手順手順 1 ユーザー割り当てマネージド ID を設定ユーザー割り当てマネージド ID を、関数アプリの [ID] &gt; [ユーザ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Flowの外部呼び出し変換方法の参考例">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="この記事では、システム割り当てマネージド ID を使用して Azure Data Factory から Azure 関数を呼び出す方法について説明します。 検証環境 Azure Data Factory V2 Data Flow Azure Functions   手順手順 1 ユーザー割り当てマネージド ID を設定ユーザー割り当てマネージド ID を、関数アプリの [ID] &gt; [ユーザ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-0.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-5.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-6.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-7.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-8.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-9.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-10.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-11.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-12.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-13.png">
+<meta property="article:published_time" content="2023-06-05T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-05-30T08:27:54.561Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="Azure Functions">
+<meta property="article:tag" content="システム割り当てマネージドID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/.%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-0.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-use-usai-auth4functions" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Data Flowの外部呼び出し変換方法の参考例
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2023-06-05T00:00:00.000Z" itemprop="datePublished">2023-06-05</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+76c03fd8-44f0-5f48-9e46-b9f375f5d662%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BData+Flow%E3%81%AE%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E5%A4%89%E6%8F%9B%E6%96%B9%E6%B3%95%E3%81%AE%E5%8F%82%E8%80%83%E4%BE%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-use-usai-auth4functions%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/" data-id="clwszt47800070no59jd1hxe9" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>この記事では、システム割り当てマネージド ID を使用して Azure Data Factory から Azure 関数を呼び出す方法について説明します。</p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2 Data Flow</li>
+<li>Azure Functions </li>
+</ul>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="手順-1-ユーザー割り当てマネージド-ID-を設定"><a href="#手順-1-ユーザー割り当てマネージド-ID-を設定" class="headerlink" title="手順 1 ユーザー割り当てマネージド ID を設定"></a>手順 1 ユーザー割り当てマネージド ID を設定</h2><p>ユーザー割り当てマネージド ID を、関数アプリの [ID] &gt; [ユーザー割り当て済み] より追加いたします。<br>公式ドキュメントの <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/app-service/overview-managed-identity?tabs=portal,http#add-a-user-assigned-identity">ユーザー割り当て ID を追加する</a> も併せてご確認ください。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-0.png"></p>
+<p>Azure ポータルより、「エンタープライズ アプリケーション」と検索いただき、<br>ユーザー割り当てマネージド ID の「オブジェクト ID」 および 「アプリケーション ID」 を後述の設定にて用います。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-1.png"></p>
+<h2 id="手順-2-Azure-関数の認証設定を行う"><a href="#手順-2-Azure-関数の認証設定を行う" class="headerlink" title="手順 2 Azure 関数の認証設定を行う"></a>手順 2 Azure 関数の認証設定を行う</h2><h3 id="手順-2-1-未作成の場合-アプリケーションの登録を行う"><a href="#手順-2-1-未作成の場合-アプリケーションの登録を行う" class="headerlink" title="手順 2.1 (未作成の場合) アプリケーションの登録を行う"></a>手順 2.1 (未作成の場合) アプリケーションの登録を行う</h3><p>Azure ポータルにて、[Microsoft Entra ID] と検索いただき、<br>[+ 追加] &gt; [アプリの登録] よりアプリの作成を行います。<br>名前を記載いただき、特別な理由がなければ規定値のまま進めます。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-2.png"><br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-3.png"></p>
+<p>作成後に表示される「アプリケーション (クライアント) ID」 「オブジェクト ID」 「ディレクトリ (テナント) ID」をメモします。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-4.png"></p>
+<h3 id="手順-2-2-認証にてアプリケーションを追加する"><a href="#手順-2-2-認証にてアプリケーションを追加する" class="headerlink" title="手順 2.2 認証にてアプリケーションを追加する"></a>手順 2.2 認証にてアプリケーションを追加する</h3><p>ご利用の Azure 関数の [認証] &gt; [ID プロバイダーを追加] を開きます。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-5.png"></p>
+<p>以下画像のように設定いたします。<br>特筆すべき点を以下の表に記載しております。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ID プロバイダー</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>アプリの登録</td>
+<td>既存アプリの登録の詳細を提供します</td>
+</tr>
+<tr>
+<td>アプリケーション (クライアント) ID</td>
+<td>2.1 で作成したアプリのアプリケーション (クライアント) ID</td>
+</tr>
+<tr>
+<td>Client application requiremen</td>
+<td>「Allow requests from any application」もしくは 「Allow requests from specific client applications」</td>
+</tr>
+<tr>
+<td>Allowed client applications (Allow requests from specific client applications を選択した場合)</td>
+<td>Azure Data Factory のマネージド ID のアプリケーション (クライアント) ID</td>
+</tr>
+<tr>
+<td>認証されていない要求</td>
+<td>HTTP 401 認可されていない: API に推奨</td>
+</tr>
+</tbody></table>
+<p><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-6.png"><br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-7.png"></p>
+<h2 id="手順-2-3-フェデレーション資格情報の設定"><a href="#手順-2-3-フェデレーション資格情報の設定" class="headerlink" title="手順 2.3 フェデレーション資格情報の設定"></a>手順 2.3 フェデレーション資格情報の設定</h2><p>手順 2.1 で作成したアプリケーションの設定を行います。<br>Azure ポータルより、[アプリケーションの登録] から該当のアプリケーションを選択します。<br>[管理] &gt; [証明書とシークレット] &gt; [フェデレーション資格情報] から、「+ 資格情報の追加」を押下します。<br>そして、Azure Functions に割り当てたユーザー割り当てマネージド ID を選択します。  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>フェデレーション資格情報のシナリオ</td>
+<td>カスタマー マネージド キー</td>
+</tr>
+<tr>
+<td>マネージド ID の選択</td>
+<td>手順 1 で割り当てたユーザー割り当てマネージド ID</td>
+</tr>
+</tbody></table>
+<p><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-8.png"><br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-9.png"></p>
+<p>PowerShell などから、az rest コマンドを用いて以下のように実行することも可能です。  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az rest --method POST --uri &quot;https://graph.microsoft.com/beta/applications/&lt;APP_REGISTRATION_OBJECT_ID&gt;/federatedIdentityCredentials&quot; --body &quot;&#123;&#x27;name&#x27;: &#x27;ManagedIdentityFederation&#x27;, &#x27;issuer&#x27;: &#x27;https://login.microsoftonline.com/&lt;TENANT ID&gt;/v2.0&#x27;, &#x27;subject&#x27;: &#x27;&lt;AZURE_FUNCTION_USER_ASSIGNED_MANAGED_IDENTITY_OBJECT_ID&gt;&#x27;, &#x27;audiences&#x27;: [ &#x27;api://AzureADTokenExchange&#x27; ]&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="手順-2-4-クライアント-シークレットの上書き"><a href="#手順-2-4-クライアント-シークレットの上書き" class="headerlink" title="手順 2.4 クライアント シークレットの上書き"></a>手順 2.4 クライアント シークレットの上書き</h2><p>手順 2.2 で作成した ID プロバイダーにおける「クライアント シークレット設定の名前」を、ユーザー割り当てマネージド ID のクライアント ID に置き換えます。  </p>
+<p>はじめに、該当の関数アプリより、[環境変数] &gt; [+ 追加] より、以下の設定を行い、[適用] を押下します。  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名前</td>
+<td>OVERRIDE_USE_MI_FIC_ASSERTION_CLIENTID</td>
+</tr>
+<tr>
+<td>値</td>
+<td>手順 1 で割り当てたユーザー割り当てマネージド ID のクライアント ID</td>
+</tr>
+</tbody></table>
+<p><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-10.png"></p>
+<p>その後、[認証] &gt; [ID プロバイダー] より、該当の ID プロバイダーを編集を行います。<br>以下画像の通り、「クライアント シークレット設定の名前」に作成した環境変数を設定します。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-11.png"></p>
+<h2 id="手順-3-Azure-Data-Factory-のマネージド-ID-にロールを付与"><a href="#手順-3-Azure-Data-Factory-のマネージド-ID-にロールを付与" class="headerlink" title="手順 3 Azure Data Factory のマネージド ID にロールを付与"></a>手順 3 Azure Data Factory のマネージド ID にロールを付与</h2><p>関数アプリの [アクセス制御 (IAM)] より、ご利用の Azure Data Factory のマネージド ID に対して<em>「閲覧者」ロール</em> を付与します。　</p>
+<h2 id="手順-4-Azure-Data-Factory-の-Azure-関数-アクティビティの設定"><a href="#手順-4-Azure-Data-Factory-の-Azure-関数-アクティビティの設定" class="headerlink" title="手順 4 Azure Data Factory の Azure 関数 アクティビティの設定"></a>手順 4 Azure Data Factory の Azure 関数 アクティビティの設定</h2><p>Azure Data Factory Studio を開き、Azure 関数 アクティビティの設定を行います。<br>Azure 関数アクティビティをドラッグアンドドロップした後、[設定] &gt; [Azure 関数のリンク サービス] &gt; [+ 新規] を選択します。<br><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-12.png">  </p>
+<p>接続先の関数アプリを選択いただき、[認証方法] を「システム割り当てマネージド ID」を選択し、[リソース ID] には手順 2.1 および手順 2.2 で登録したアプリケーションのクライアント ID を設定します。<br>詳細な設定項目につきましては、公式ドキュメントの <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-azure-function-activity#azure-function-linked-service">Azure Functions のリンクされたサービス</a> もご覧ください。</p>
+<p><img src=".%5Chow-to-use-usai-auth4functions%5Chow-to-use-usai4functions-13.png">  </p>
+<p>以上の設定で完了です。</p>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure-Functions/" rel="tag">Azure Functions</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" rel="tag">システム割り当てマネージドID</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-use-usai-auth4functions.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../how-to-data-flow-external-call/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Data Flowの外部呼び出し変換方法の参考例
+        
+      </div>
+    </a>
+  
+  
+    <a href="../how-to-get-adf-support-file/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Azure Data Factory のサポートファイルの取得方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../how-to-connect-sp-online/">Azure Data Factory を使用して SharePoint Online リストからデータをコピーする</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-create-dataverse-linkedservice-by-service-principal/">サービスプリンシパル認証によるAzure Data Factory と Dynamics 365 (Microsoft Dataverse) の接続方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-data-flow-external-call/">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+          <li>
+            <a href="">Data Flowの外部呼び出し変換方法の参考例</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure-Functions/" rel="tag">Azure Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online/" rel="tag">SharePoint Online</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" rel="tag">SharePoint Online リスト</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" rel="tag">システム割り当てマネージドID</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Azure-Functions/" style="font-size: 10px;">Azure Functions</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/Dataverse/" style="font-size: 10px;">Dataverse</a> <a href="../../tags/SharePoint-Online/" style="font-size: 10px;">SharePoint Online</a> <a href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" style="font-size: 10px;">SharePoint Online リスト</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" style="font-size: 10px;">システム割り当てマネージドID</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" style="font-size: 10px;">リンクサービス</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2024 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

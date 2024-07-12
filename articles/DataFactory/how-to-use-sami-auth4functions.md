@@ -27,7 +27,7 @@ Azure ポータルにて、[Microsoft Entra ID] と検索いただき、
 ![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-1.png)
 
 
-作成後に表示される「アプリケーション (クライアント) ID」 「オブジェクト ID」 「ディレクトリ (テナント) ID」をメモします。  
+作成後に表示される「アプリケーション (クライアント) ID」をメモします。  
 ![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-2.png)
 
 ### 手順 1.2 アプリケーションのロールを作成する
@@ -82,7 +82,7 @@ New-AzureADServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.Ob
 |  アプリの登録  |  既存アプリの登録の詳細を提供します  |
 |  アプリケーション (クライアント) ID  |  2.1 で作成したアプリのアプリケーション (クライアント) ID  |
 |  Client application requiremen  |  「Allow requests from any application」もしくは 「Allow requests from specific client applications」 |
-|  Allowed client applications (Allow requests from specific client applications を選択した場合) |  Azure Data Factory のマネージド ID のアプリケーション (クライアント) ID |
+|  Allowed client applications (Allow requests from specific client applications を選択した場合) |  Azure Data Factory のマネージド ID の**アプリケーション (クライアント) ID** |
 |  認証されていない要求  |  HTTP 401 認可されていない: API に推奨  |
 
 

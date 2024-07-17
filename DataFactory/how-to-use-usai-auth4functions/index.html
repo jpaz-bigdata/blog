@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   
   
-  <title>Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 | Japan Azure Big Data Support Blog</title>
+  <title>Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法) | Japan Azure Big Data Support Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="目次 概要 検証環境 手順 手順 1 ユーザー割り当てマネージド ID を設定 手順 2 Azure 関数の認証設定を行う 手順 2.1 (未作成の場合) アプリケーションの登録を行う 手順 2.2 認証にてアプリケーションを追加する 手順 2.3 フェデレーション資格情報の設定 手順 2.4 クライアント シークレットの上書き   手順 3 Azure Data Factory のマネージド">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Azure Functions へのシステム割り当てマネージド ID 認証の設定方法">
+<meta property="og:title" content="Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)">
 <meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/index.html">
 <meta property="og:site_name" content="Japan Azure Big Data Support Blog">
 <meta property="og:description" content="目次 概要 検証環境 手順 手順 1 ユーザー割り当てマネージド ID を設定 手順 2 Azure 関数の認証設定を行う 手順 2.1 (未作成の場合) アプリケーションの登録を行う 手順 2.2 認証にてアプリケーションを追加する 手順 2.3 フェデレーション資格情報の設定 手順 2.4 クライアント シークレットの上書き   手順 3 Azure Data Factory のマネージド">
@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/how-to-use-usai4functions-12.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/how-to-use-usai4functions-13.png">
 <meta property="article:published_time" content="2024-05-30T00:00:00.000Z">
-<meta property="article:modified_time" content="2024-07-17T06:09:57.107Z">
+<meta property="article:modified_time" content="2024-07-17T06:13:44.577Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -107,7 +107,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Azure Functions へのシステム割り当てマネージド ID 認証の設定方法
+      Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)
     </h1>
   
 
@@ -120,9 +120,9 @@
         
         
         
-        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+76c03fd8-44f0-5f48-9e46-b9f375f5d662%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BAzure+Functions+%E3%81%B8%E3%81%AE%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89+ID+%E8%AA%8D%E8%A8%BC%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-use-usai-auth4functions%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+76c03fd8-44f0-5f48-9e46-b9f375f5d662%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BAzure+Functions+%E3%81%B8%E3%81%AE%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89+ID+%E8%AA%8D%E8%A8%BC%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95+%28%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89+ID+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B%E6%96%B9%E6%B3%95%29%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-use-usai-auth4functions%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-use-usai-auth4functions.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/" data-id="clypg0l6u00080nry8tbg4uds" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-usai-auth4functions/" data-id="clypg5gsb00080op840s3ew39" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -294,7 +294,7 @@
           </li>
         
           <li>
-            <a href="">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法</a>
+            <a href="">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)</a>
           </li>
         
           <li>

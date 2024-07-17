@@ -50,8 +50,8 @@ Azure ポータルにて [アプリの登録] を開きます。
 ![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-4.png)
   
     
-その後、PowerShell を用いて以下のコマンドを実行いたします。  
-なお、実行には AzureAD モジュールが必要となっております。  
+その後、Azure Cloud Shell や PowerShell を用いて以下のコマンドを実行いたします。  
+AzureAD モジュールを用いるサンプル プログラムを記載しておりますが、[AzureAD モジュール 公式ドキュメント](https://learn.microsoft.com/ja-jp/powershell/azure/active-directory/install-adv2?view=azureadps-2.0) にて、2024 年 3 月 30 日をもって、非推奨プランとなっている点にご留意ください。
 
 ```
 Connect-AzureAD
@@ -62,9 +62,28 @@ $approle = $funapp.AppRoles | Where-Object {$_.Value -eq $PermissionName}
 New-AzureADServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.ObjectId -ResourceId $funapp.ObjectId -Id $approle.Id
 ```
 
+AzureAD モジュールがご要望に沿わない場合は、後続モジュールである Microsoft Graph PowerShell をご利用ください。  
+こちらの場合は、以下のようなサンプル プログラムとなります。
+
+```
+Connect-MgGraph -Scopes 'AppRoleAssignment.ReadWrite.All'
+$MSI = Get-MgServicePrincipal -Filter "displayName eq '<datafactory-name>'"
+$funapp = Get-MgServicePrincipal -Filter "displayName eq '<aad-appName>'"
+$PermissionName = "<手順1.2 で設定した「値」を記載ください。>"　
+$approle = $funapp.AppRoles | Where-Object {$_.Value -eq $PermissionName}
+ 
+$params = @{
+principalId = $MSI.Id
+resourceId = $funapp.Id
+appRoleId = $approle.Id
+}
+ 
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $MSI.Id -BodyParameter $params
+```
+
 ### 手順 1.4 ロールの割り当てを確認する
 [エンタープライズ アプリケーション] より、該当のアプリケーションを選択ください。  
-[ユーザーとグループ] より、ご利用の ADF 名で追加されているかご確認ください。
+[ユーザーとグループ] より、ご利用の Azure Data Factory 名で追加されているかご確認ください。
 [](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-5.png)
   
 
@@ -82,9 +101,22 @@ New-AzureADServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.Ob
 |  ID プロバイダー  |  Microsoft  |
 |  アプリの登録  |  既存アプリの登録の詳細を提供します  |
 |  アプリケーション (クライアント) ID  |  2.1 で作成したアプリのアプリケーション (クライアント) ID  |
-|  Client application requiremen  |  「Allow requests from any application」もしくは 「Allow requests from specific client applications」 |
-|  Allowed client applications (Allow requests from specific client applications を選択した場合) |  Azure Data Factory のマネージド ID の**アプリケーション (クライアント) ID** |
+|  クライアント アプリケーションの要件  |  「このアプリケーション自体からの要求のみを許可する」もしくは 「特定のクライアント アプリケーションからの要求を許可する」 |
+|  許可されたクライアント アプリケーション (特定のクライアント アプリケーションからの要求を許可する を選択した場合) |  Azure Data Factory のマネージド ID の**アプリケーション (クライアント) ID** |
 |  認証されていない要求  |  HTTP 401 認可されていない: API に推奨  |
+
+![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-9.png)
+
+
+なお、Azure Data Factory のマネージド ID のアプリケーション (クライアント) ID は、以下にてご確認いただけます。  
+
+Azure ポータルより「Microsoft Entra ID」と検索いただき、
+検索ボックスにて、ご利用の Azure Data Factory 名を検索いたします。  
+![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-10.png)
+
+該当の Azure Data Factory をクリックいただくことで、「アプリケーション ID」をご確認いただけます。
+![](./how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-11.png)
+
 
 
 ## 手順 3 Azure Data Factory の Azure 関数 アクティビティの設定

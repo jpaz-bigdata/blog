@@ -1,5 +1,5 @@
 ---
-title: Azure Functions へのシステム割り当てマネージド ID 認証の設定方法
+title: Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)
 date: 2024-05-30 09:00:00
 tags:
   - Azure

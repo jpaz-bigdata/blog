@@ -19,10 +19,13 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-3.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-4.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-6.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-9.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-10.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-11.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-7.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-8.png">
 <meta property="article:published_time" content="2024-07-12T00:00:00.000Z">
-<meta property="article:modified_time" content="2024-07-12T04:30:38.699Z">
+<meta property="article:modified_time" content="2024-07-17T06:09:57.103Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -116,7 +119,7 @@
         
         <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+549a111a-721d-5a5f-89e3-2afd3947dbda%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BAzure+Functions+%E3%81%B8%E3%81%AE%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89+ID+%E8%AA%8D%E8%A8%BC%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-use-sami-auth4functions%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-use-sami-auth4functions.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-use-sami-auth4functions.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/" data-id="clyi79mga00070ns7cg50cykh" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/" data-id="clypg0l6u00070nryg0kb7y8u" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -155,10 +158,13 @@
 </tbody></table>
 <p><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-3.png"></p>
 <h3 id="手順-1-3-マネージド-ID-にアプリ-ロールを付与する"><a href="#手順-1-3-マネージド-ID-にアプリ-ロールを付与する" class="headerlink" title="手順 1.3 マネージド ID にアプリ ロールを付与する"></a>手順 1.3 マネージド ID にアプリ ロールを付与する</h3><p>事前に権限を割り振れるかどうか確認いたします。<br>[エンタープライズ アプリケーション] より、該当のアプリケーションを選択ください。<br>[プロパティ] より、「割り当てが必要ですか?」が有効になっていることを確認します。<br><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-4.png"></p>
-<p>その後、PowerShell を用いて以下のコマンドを実行いたします。<br>なお、実行には AzureAD モジュールが必要となっております。  </p>
+<p>その後、Azure Cloud Shell や PowerShell を用いて以下のコマンドを実行いたします。<br>AzureAD モジュールを用いるサンプル プログラムを記載しておりますが、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/powershell/azure/active-directory/install-adv2?view=azureadps-2.0">AzureAD モジュール 公式ドキュメント</a> にて、2024 年 3 月 30 日をもって、非推奨プランとなっている点にご留意ください。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Connect-AzureAD</span><br><span class="line">$MSI = Get-AzureADServicePrincipal -Filter &quot;displayName eq &#x27;&lt;datafactory-name&gt;&#x27;&quot; </span><br><span class="line">$funapp = Get-AzureADServicePrincipal -Filter &quot;displayName eq &#x27;&lt;aad-appName&gt;&#x27;&quot;</span><br><span class="line">$PermissionName = &quot;&lt;手順1.2 で設定した「値」を記載ください。&gt;&quot;　</span><br><span class="line">$approle = $funapp.AppRoles | Where-Object &#123;$_.Value -eq $PermissionName&#125;</span><br><span class="line">New-AzureADServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.ObjectId -ResourceId $funapp.ObjectId -Id $approle.Id</span><br></pre></td></tr></table></figure>
 
-<h3 id="手順-1-4-ロールの割り当てを確認する"><a href="#手順-1-4-ロールの割り当てを確認する" class="headerlink" title="手順 1.4 ロールの割り当てを確認する"></a>手順 1.4 ロールの割り当てを確認する</h3><p>[エンタープライズ アプリケーション] より、該当のアプリケーションを選択ください。<br>[ユーザーとグループ] より、ご利用の ADF 名で追加されているかご確認ください。<br><a href="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-5.png"></a></p>
+<p>AzureAD モジュールがご要望に沿わない場合は、後続モジュールである Microsoft Graph PowerShell をご利用ください。<br>こちらの場合は、以下のようなサンプル プログラムとなります。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Connect-MgGraph -Scopes &#x27;AppRoleAssignment.ReadWrite.All&#x27;</span><br><span class="line">$MSI = Get-MgServicePrincipal -Filter &quot;displayName eq &#x27;&lt;datafactory-name&gt;&#x27;&quot;</span><br><span class="line">$funapp = Get-MgServicePrincipal -Filter &quot;displayName eq &#x27;&lt;aad-appName&gt;&#x27;&quot;</span><br><span class="line">$PermissionName = &quot;&lt;手順1.2 で設定した「値」を記載ください。&gt;&quot;　</span><br><span class="line">$approle = $funapp.AppRoles | Where-Object &#123;$_.Value -eq $PermissionName&#125;</span><br><span class="line"> </span><br><span class="line">$params = @&#123;</span><br><span class="line">principalId = $MSI.Id</span><br><span class="line">resourceId = $funapp.Id</span><br><span class="line">appRoleId = $approle.Id</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $MSI.Id -BodyParameter $params</span><br></pre></td></tr></table></figure>
+
+<h3 id="手順-1-4-ロールの割り当てを確認する"><a href="#手順-1-4-ロールの割り当てを確認する" class="headerlink" title="手順 1.4 ロールの割り当てを確認する"></a>手順 1.4 ロールの割り当てを確認する</h3><p>[エンタープライズ アプリケーション] より、該当のアプリケーションを選択ください。<br>[ユーザーとグループ] より、ご利用の Azure Data Factory 名で追加されているかご確認ください。<br><a href="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-5.png"></a></p>
 <h2 id="手順-2-Azure-関数の認証設定を行う"><a href="#手順-2-Azure-関数の認証設定を行う" class="headerlink" title="手順 2 Azure 関数の認証設定を行う"></a>手順 2 Azure 関数の認証設定を行う</h2><h3 id="手順-2-1-認証にてアプリケーションを追加する"><a href="#手順-2-1-認証にてアプリケーションを追加する" class="headerlink" title="手順 2.1 認証にてアプリケーションを追加する"></a>手順 2.1 認証にてアプリケーションを追加する</h3><p>ご利用の Azure 関数の [認証] &gt; [ID プロバイダーを追加] を開きます。<br><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-6.png"></p>
 <p>以下画像のように設定いたします。<br>特筆すべき点を以下の表に記載しております。  </p>
 <table>
@@ -181,11 +187,11 @@
 <td>2.1 で作成したアプリのアプリケーション (クライアント) ID</td>
 </tr>
 <tr>
-<td>Client application requiremen</td>
-<td>「Allow requests from any application」もしくは 「Allow requests from specific client applications」</td>
+<td>クライアント アプリケーションの要件</td>
+<td>「このアプリケーション自体からの要求のみを許可する」もしくは 「特定のクライアント アプリケーションからの要求を許可する」</td>
 </tr>
 <tr>
-<td>Allowed client applications (Allow requests from specific client applications を選択した場合)</td>
+<td>許可されたクライアント アプリケーション (特定のクライアント アプリケーションからの要求を許可する を選択した場合)</td>
 <td>Azure Data Factory のマネージド ID の<strong>アプリケーション (クライアント) ID</strong></td>
 </tr>
 <tr>
@@ -193,6 +199,10 @@
 <td>HTTP 401 認可されていない: API に推奨</td>
 </tr>
 </tbody></table>
+<p><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-9.png"></p>
+<p>なお、Azure Data Factory のマネージド ID のアプリケーション (クライアント) ID は、以下にてご確認いただけます。  </p>
+<p>Azure ポータルより「Microsoft Entra ID」と検索いただき、<br>検索ボックスにて、ご利用の Azure Data Factory 名を検索いたします。<br><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-10.png"></p>
+<p>該当の Azure Data Factory をクリックいただくことで、「アプリケーション ID」をご確認いただけます。<br><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-11.png"></p>
 <h2 id="手順-3-Azure-Data-Factory-の-Azure-関数-アクティビティの設定"><a href="#手順-3-Azure-Data-Factory-の-Azure-関数-アクティビティの設定" class="headerlink" title="手順 3 Azure Data Factory の Azure 関数 アクティビティの設定"></a>手順 3 Azure Data Factory の Azure 関数 アクティビティの設定</h2><p>Azure Data Factory Studio を開き、Azure 関数 アクティビティの設定を行います。<br>Azure 関数アクティビティをドラッグアンドドロップした後、[設定] &gt; [Azure 関数のリンク サービス] &gt; [+ 新規] を選択します。<br><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-7.png">  </p>
 <p>接続先の関数アプリを選択いただき、[認証方法] を「システム割り当てマネージド ID」を選択し、[リソース ID] には手順 2.1 および手順 2.2 で登録したアプリケーションのクライアント ID を設定します。<br>詳細な設定項目につきましては、公式ドキュメントの <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/control-flow-azure-function-activity#azure-function-linked-service">Azure Functions のリンクされたサービス</a> もご覧ください。</p>
 <p><img src="/blog/DataFactory/how-to-use-sami-auth4functions/how-to-use-sami-auth4functions-8.png">  </p>

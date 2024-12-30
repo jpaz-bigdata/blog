@@ -69,7 +69,9 @@ Azure Data Factory の組み込みロールとして、**「Data Factory 共同�
 "notActions": [
                     "Microsoft.DataFactory/factories/pipelines/write"
                 ]
-```                
+```  
+  
+  
 以下のように、操作を行う権限が不足しているエラーを確認できます。
 ![](./how-to-custom-roles/how-to-custom-roles-5.png)  
 

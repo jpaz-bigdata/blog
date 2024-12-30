@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>カスタム ロールによる ADF の操作制御 | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="この記事では、カスタム ロール を使用して Azure Data Factory Studio におけるユーザーの操作 (データのプレビュー、パイプラインの作成、リンク サービスの作成) に制限を加える方法について説明します。   検証環境 Azure Data Factory V2    Azure のロールカスタム ロールの作成方法Azure では、組み込みで提供されているロールの他に、ユーザ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="カスタム ロールによる ADF の操作制御">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="この記事では、カスタム ロール を使用して Azure Data Factory Studio におけるユーザーの操作 (データのプレビュー、パイプラインの作成、リンク サービスの作成) に制限を加える方法について説明します。   検証環境 Azure Data Factory V2    Azure のロールカスタム ロールの作成方法Azure では、組み込みで提供されているロールの他に、ユーザ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-7.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-3.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-4.png">
+<meta property="article:published_time" content="2024-12-26T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-30T09:02:58.881Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-7.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-custom-roles" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      カスタム ロールによる ADF の操作制御
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2024-12-26T00:00:00.000Z" itemprop="datePublished">2024-12-26</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+b2e2dfb4-8deb-563b-ac8e-936ad225912f%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5B%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0+%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%AB%E3%82%88%E3%82%8B+ADF+%E3%81%AE%E6%93%8D%E4%BD%9C%E5%88%B6%E5%BE%A1%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-custom-roles%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-custom-roles.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-custom-roles.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/" data-id="cm5ataikq00040nnqhrgxf4qw" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>この記事では、カスタム ロール を使用して Azure Data Factory Studio におけるユーザーの操作 (データのプレビュー、パイプラインの作成、リンク サービスの作成) に制限を加える方法について説明します。  </p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2  </li>
+</ul>
+<h1 id="Azure-のロール"><a href="#Azure-のロール" class="headerlink" title="Azure のロール"></a>Azure のロール</h1><h2 id="カスタム-ロールの作成方法"><a href="#カスタム-ロールの作成方法" class="headerlink" title="カスタム ロールの作成方法"></a>カスタム ロールの作成方法</h2><p>Azure では、組み込みで提供されているロールの他に、ユーザーで独自のカスタム ロールを作成することが可能です。<br>組み込みロールと同様に、カスタム ロールは、ユーザー、グループ、サービス プリンシパルに対して、管理グループ、サブスクリプション、およびリソース グループのスコープで割り当てることができます。</p>
+<p>カスタム ロールの作成手順につきましては、公式ドキュメントの <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/role-based-access-control/custom-roles-portal">Azure portal を使用して Azure カスタム ロールを作成または更新する</a> をご覧ください。</p>
+<h2 id="Azure-Data-Factory-の組み込みロール"><a href="#Azure-Data-Factory-の組み込みロール" class="headerlink" title="Azure Data Factory の組み込みロール"></a>Azure Data Factory の組み込みロール</h2><p>Azure Data Factory の組み込みロールとして、<strong>「Data Factory 共同作成者」</strong> ロールが提供されています。<br><strong>「Data Factory 共同作成者」</strong> ロールで提供されている各権限につきましては、 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles/analytics#data-factory-contributor">Azure 組み込みロール - Data Factory Contributor</a> および <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/role-based-access-control/permissions/analytics#microsoftdatafactory">Microsoft.DataFactory</a> ドキュメントをご覧ください。<br>なお、上記のドキュメントにて 「Microsoft.DataFactory/dataFactories/*」 は、既に廃止されている Azure Data Factory V1 向けになりますので、カスタム ロールを作成される際は考慮していただく必要はございません。<br><img src="/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-7.png">  </p>
+<h1 id="カスタム-ロールによる制限のシナリオ"><a href="#カスタム-ロールによる制限のシナリオ" class="headerlink" title="カスタム ロールによる制限のシナリオ"></a>カスタム ロールによる制限のシナリオ</h1><p>以下に、よくある利用例としてのカスタム ロールをご紹介いたします。<br>組み込みロールである <strong>「Data Factory 共同作成者」</strong> ロールを基本に、制限したいアクションに該当する権限を <strong>NotAction</strong> に追加いたします。<br>作成後、制限したいユーザーにカスタム ロールを付与します。なお、反映までに数分かかる場合がございます。<br><img src="/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-1.png"><br><img src="/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-2.png">  </p>
+<p>また、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/concepts-roles-permissions#custom-scenarios-and-custom-roles">Azure Data Factory のロールとアクセス許可</a> ドキュメントも併せてご覧ください。</p>
+<h2 id="データのプレビューを制限する"><a href="#データのプレビューを制限する" class="headerlink" title="データのプレビューを制限する"></a>データのプレビューを制限する</h2><p>既存のパイプラインに設定されているアクティビティでは、[データのプレビュー] を押下することで、<br>接続先のデータを確認することが可能です。<br>こちらの操作をユーザーに操作させたくない場合は、以下の 3 つの権限を NotActions に追加します。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;notActions&quot;: [</span><br><span class="line">                    &quot;Microsoft.DataFactory/factories/getFeatureValue/read&quot;,</span><br><span class="line">                    &quot;Microsoft.DataFactory/factories/getDataPlaneAccess/action&quot;,</span><br><span class="line">                    &quot;Microsoft.DataFactory/factories/addDataFlowToDebugSession/action&quot;</span><br><span class="line">                ],</span><br></pre></td></tr></table></figure>
+
+<p>上記のカスタム ロールを付与されたユーザーが、[データのプレビュー] を押下すると、　　<br>以下のような権限が不足しているエラーを確認することが可能です。<br><img src="/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-3.png">  </p>
+<p>データ フローの [データのプレビュー] でも同様のエラーをご確認いただけます。<br><img src="/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-4.png">  </p>
+<h2 id="パイプラインの新規作成および制限を制限する"><a href="#パイプラインの新規作成および制限を制限する" class="headerlink" title="パイプラインの新規作成および制限を制限する"></a>パイプラインの新規作成および制限を制限する</h2><p>既存のパイプラインの編集や新規のパイプラインの作成を制限されたい場合は、以下の権限を NotActions に追加いたします。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;notActions&quot;: [</span><br><span class="line">                    &quot;Microsoft.DataFactory/factories/pipelines/write&quot;</span><br><span class="line">                ]</span><br><span class="line">```                </span><br><span class="line">以下のように、操作を行う権限が不足しているエラーを確認できます。</span><br><span class="line">![](/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-5.png)  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## リンク サービスの新規作成および編集を制限する</span><br><span class="line">既存のリンク サービスの編集や新規のリンク サービスの作成を制限されたい場合は、以下の権限を NotActions に追加いたします。</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>“notActions”: [<br>                    “Microsoft.DataFactory/factories/linkedServices/write”<br>                ]</p>
+<pre><code>
+以下のように、操作を行う権限が不足しているエラーを確認できます。
+![](/blog/DataFactory/how-to-custom-roles/how-to-custom-roles-6.png)  
+
+
+</code></pre>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-custom-roles.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../how-to-use-sami-auth4functions/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">カスタム ロールによる ADF の操作制御</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-use-sami-auth4functions/">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-use-usai-auth4functions/">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-connect-sp-online/">Azure Data Factory を使用して SharePoint Online リストからデータをコピーする</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-add-variables-to-sink-filename-in-copy-activity/">シンクに出力するファイル名に日付やパイプライン実行 ID を加える方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure-Functions/" rel="tag">Azure Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online/" rel="tag">SharePoint Online</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" rel="tag">SharePoint Online リスト</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" rel="tag">システム割り当てマネージドID</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Azure-Functions/" style="font-size: 15px;">Azure Functions</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/Dataverse/" style="font-size: 10px;">Dataverse</a> <a href="../../tags/SharePoint-Online/" style="font-size: 10px;">SharePoint Online</a> <a href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" style="font-size: 10px;">SharePoint Online リスト</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" style="font-size: 15px;">システム割り当てマネージドID</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" style="font-size: 10px;">リンクサービス</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2024 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

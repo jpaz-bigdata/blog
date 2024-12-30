@@ -9,13 +9,6 @@
   </url>
   
   <url>
-    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/</loc>
-    
-    <lastmod>2024-12-30</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-get-adf-support-file/</loc>
     
     <lastmod>2024-12-30</lastmod>
@@ -23,7 +16,7 @@
   </url>
   
   <url>
-    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/</loc>
+    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-use-sami-auth4functions/</loc>
     
     <lastmod>2024-12-30</lastmod>
     
@@ -44,7 +37,7 @@
   </url>
   
   <url>
-    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/</loc>
+    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-custom-roles/</loc>
     
     <lastmod>2024-12-30</lastmod>
     
@@ -52,6 +45,13 @@
   
   <url>
     <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-add-variables-to-sink-filename-in-copy-activity/</loc>
+    
+    <lastmod>2024-12-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online/</loc>
     
     <lastmod>2024-12-30</lastmod>
     

@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-12.png">
 <meta property="article:published_time" content="2025-01-30T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-01-30T09:32:33.085Z">
+<meta property="article:modified_time" content="2025-01-30T09:44:26.022Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -120,7 +120,7 @@
         
         <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+5d06deb6-963a-5dd2-a1fc-f3a0f226fbe2%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BGraphAPI+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6+SharePoint+Online+%E3%81%8B%E3%82%89%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm6j4zy8a00010npb99vdhy75" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm6j5f8al00010nmnajt42vjl" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -139,7 +139,31 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Connect-AzureAD -TenantId &quot;&lt;テナントID&gt;&quot;</span><br><span class="line">$ManagedIdentity = Get-AzureADServicePrincipal -ObjectId &quot;&lt;ユーザー割り当てマネージド ID のオブジェクト (プリンシパル) ID&gt;&quot;</span><br><span class="line">$GraphAPI = Get-AzureADServicePrincipal -Filter &quot;DisplayName eq &#x27;Microsoft Graph&#x27;&quot;</span><br><span class="line">$SitesReadAll = $GraphAPI.AppRoles | where Value -like &#x27;Sites.Read.All&#x27;</span><br><span class="line"></span><br><span class="line">New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIdentity.ObjectId  -PrincipalId $ManagedIdentity.ObjectId  -ResourceId $GraphAPI.ObjectId</span><br></pre></td></tr></table></figure>
 <p>　　
 　　</p>
-<h3 id="Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録"><a href="#Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録" class="headerlink" title="Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録"></a>Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録</h3><p>Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。<br><a target="_blank" rel="noopener" href="https://adf.azure.com/">Azure Data Factory Studio</a> を開いていただき、[管理] &gt; [資格情報] &gt; [+ 新規] から作成いたします。設定する項目は以下の通りです。<br>|  項目  |  値  |<br>| —- | —- |<br>|  種類  |  User-assigned managed identity  |<br>|  Azure サブスクリプション  |  作成したユーザー割り当てマネージド ID を選択します  |<br>|  ユーザー割り当てマネージド ID  | 作成したユーザー割り当てマネージド ID を選択します  |</p>
+<h3 id="Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録"><a href="#Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録" class="headerlink" title="Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録"></a>Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録</h3><p>Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。<br><a target="_blank" rel="noopener" href="https://adf.azure.com/">Azure Data Factory Studio</a> を開いていただき、[管理] &gt; [資格情報] &gt; [+ 新規] から作成いたします。設定する項目は以下の通りです。  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>種類</td>
+<td>User-assigned managed identity</td>
+</tr>
+<tr>
+<td>Azure サブスクリプション</td>
+<td>作成したユーザー割り当てマネージド ID を選択します</td>
+</tr>
+<tr>
+<td>ユーザー割り当てマネージド ID</td>
+<td>作成したユーザー割り当てマネージド ID を選択します</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png"></p>
 <h2 id="パイプラインを作成する"><a href="#パイプラインを作成する" class="headerlink" title="パイプラインを作成する"></a>パイプラインを作成する</h2><p>Microsoft Graph REST API を使用して、コピーに必要な ダウンロード URL を取得するための Web アクティビティと コピー アクティビティを作成します。<br>パイプラインの全体図は以下の通りです。</p>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png"></p>

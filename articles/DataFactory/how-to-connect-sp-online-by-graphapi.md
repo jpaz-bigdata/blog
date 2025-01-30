@@ -191,7 +191,7 @@ Get File Web アクティビティで得られた `@microsoft.graph.downloadUrl`
 @activity('Get File').output['@microsoft.graph.downloadUrl']
 ```  
 
-![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png)
+![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-12.png)
 
 
 設定は以上となります。　　

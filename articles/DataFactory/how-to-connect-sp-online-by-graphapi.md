@@ -59,13 +59,14 @@ New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIde
 
 ### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録
 Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。  
-[Azure Data Factory Studio](https://adf.azure.com/) を開いていただき、[管理] > [資格情報] > [+ 新規] から作成いたします。設定する項目は以下の通りです。
+[Azure Data Factory Studio](https://adf.azure.com/) を開いていただき、[管理] > [資格情報] > [+ 新規] から作成いたします。設定する項目は以下の通りです。  
+
 |  項目  |  値  |
 | ---- | ---- |
 |  種類  |  User-assigned managed identity  |
 |  Azure サブスクリプション  |  作成したユーザー割り当てマネージド ID を選択します  |
 |  ユーザー割り当てマネージド ID  | 作成したユーザー割り当てマネージド ID を選択します  |
-
+  
 
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png)
 

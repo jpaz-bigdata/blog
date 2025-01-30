@@ -53,7 +53,9 @@ $GraphAPI = Get-AzureADServicePrincipal -Filter "DisplayName eq 'Microsoft Graph
 $SitesReadAll = $GraphAPI.AppRoles | where Value -like 'Sites.Read.All'
 
 New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIdentity.ObjectId  -PrincipalId $ManagedIdentity.ObjectId  -ResourceId $GraphAPI.ObjectId
-```  
+```
+　　
+　　
 
 ### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録
 Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。  

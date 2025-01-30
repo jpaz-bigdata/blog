@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>GraphAPI を用いて SharePoint Online からファイルを移行する | Japan Azure Big Data Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Azure Data Factory では、SharePoint Online リストや ファイルをコピーすることが可能です。詳細は、SharePoint コネクタ の公式ドキュメントをご覧ください。   しかし、上記ドキュメントにて利用されている ACS の提供終了計画 により、2026 年 4 月以降はご利用できません。SharePoint Online リストのデータを取得する場合は、サービ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GraphAPI を用いて SharePoint Online からファイルを移行する">
+<meta property="og:url" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/index.html">
+<meta property="og:site_name" content="Japan Azure Big Data Support Blog">
+<meta property="og:description" content="Azure Data Factory では、SharePoint Online リストや ファイルをコピーすることが可能です。詳細は、SharePoint コネクタ の公式ドキュメントをご覧ください。   しかし、上記ドキュメントにて利用されている ACS の提供終了計画 により、2026 年 4 月以降はご利用できません。SharePoint Online リストのデータを取得する場合は、サービ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-1.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png">
+<meta property="article:published_time" content="2025-01-30T00:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-30T09:10:31.567Z">
+<meta property="article:author" content="Azure Big Data Support Team">
+<meta property="article:tag" content="Azure">
+<meta property="article:tag" content="Data Factory">
+<meta property="article:tag" content="SharePoint">
+<meta property="article:tag" content="GraphAPI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-1.png">
+  
+    <link rel="alternate" href="../../atom.xml" title="Japan Azure Big Data Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpaz-bigdata.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../index.html" id="logo">Japan Azure Big Data Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../index.html" id="subtitle">日本マイクロソフトの Azure Big data 処理に関する製品のサポート情報のブログです。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DataFactory/how-to-connect-sp-online-by-graphapi" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      GraphAPI を用いて SharePoint Online からファイルを移行する
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published: 
+        <a href="" class="article-date-single">
+  <time datetime="2025-01-30T00:00:00.000Z" itemprop="datePublished">2025-01-30</time>
+</a>
+        
+        
+        
+        <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+5d06deb6-963a-5dd2-a1fc-f3a0f226fbe2%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BGraphAPI+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6+SharePoint+Online+%E3%81%8B%E3%82%89%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm6j47med00010ns8etroad6e" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Azure Data Factory では、SharePoint Online リストや ファイルをコピーすることが可能です。<br>詳細は、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/data-factory/connector-sharepoint-online-list?tabs=data-factory">SharePoint コネクタ</a> の公式ドキュメントをご覧ください。  </p>
+<p>しかし、上記ドキュメントにて利用されている <strong>ACS の提供終了計画</strong> により、2026 年 4 月以降はご利用できません。<br>SharePoint Online リストのデータを取得する場合は、<strong>サービスプリンシパル証明書認証</strong> を代替策としてご利用いただけます。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-1.png">    </p>
+<p>SharePoint Online 上のファイルをコピーする方法として、Microsoft Graph REST API を用いて方法がございます。本記事では、Graph API を用いて SharePoint Online 上のファイルを Azure Data Lake Storage Gen2 へコピーする方法をご紹介いたします。　　</p>
+<h1 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h1><ul>
+<li>Azure Data Factory V2 </li>
+<li>ユーザー割り当てマネージド ID</li>
+<li>Microsoft Graph REST API</li>
+</ul>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="認証の準備"><a href="#認証の準備" class="headerlink" title="認証の準備"></a>認証の準備</h2><h3 id="ユーザー割り当てマネージド-ID-の作成"><a href="#ユーザー割り当てマネージド-ID-の作成" class="headerlink" title="ユーザー割り当てマネージド ID の作成"></a>ユーザー割り当てマネージド ID の作成</h3><p>本記事では、Microsoft Graph REST API を利用する際の資格情報として、ユーザー割り当てマネージド IDを利用します。<br>ユーザー割り当てマネージド ID を作成していない場合は、以下のように Azure ポータル上から作成可能です。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png"></p>
+<h3 id="ユーザー割り当てマネージド-ID-の-Object-ID-の確認"><a href="#ユーザー割り当てマネージド-ID-の-Object-ID-の確認" class="headerlink" title="ユーザー割り当てマネージド ID の Object ID の確認"></a>ユーザー割り当てマネージド ID の Object ID の確認</h3><p>作成したユーザー割り当てマネージド ID より、<strong>オブジェクト (プリンシパル) ID</strong> をメモします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png"></p>
+<h3 id="ユーザー割り当てマネージド-ID-に権限を付与"><a href="#ユーザー割り当てマネージド-ID-に権限を付与" class="headerlink" title="ユーザー割り当てマネージド ID に権限を付与"></a>ユーザー割り当てマネージド ID に権限を付与</h3><p>ユーザー割り当てマネージド ID に対して、SharePoint Online 上のリソースを取得するための権限を付与します。<br>任意の端末から、以下の PowerShell コマンドを実行します。<br>今回は、SharePoint Online サイト上のリソースを読み取り/取得するために <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/permissions-reference#sitesreadall">Sites.ReadWrite.All</a> 権限を付与しております。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">Connect-AzureAD -TenantId &quot;&lt;テナントID&gt;&quot;</span><br><span class="line">$ManagedIdentity = Get-AzureADServicePrincipal -ObjectId &quot;&lt;ユーザー割り当てマネージド ID のオブジェクト (プリンシパル) ID&gt;&quot;</span><br><span class="line">$GraphAPI = Get-AzureADServicePrincipal -Filter &quot;DisplayName eq &#x27;Microsoft Graph&#x27;&quot;</span><br><span class="line">$SitesReadAll = $GraphAPI.AppRoles | where Value -like &#x27;Sites.Read.All&#x27;</span><br><span class="line"></span><br><span class="line">New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIdentity.ObjectId  -PrincipalId $ManagedIdentity.ObjectId  -ResourceId $GraphAPI.ObjectId</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録</span><br><span class="line">Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。  </span><br><span class="line">[Azure Data Factory Studio](https://adf.azure.com/) を開いていただき、[管理] &gt; [資格情報] &gt; [+ 新規] から作成いたします。設定する項目は以下の通りです。</span><br><span class="line">|  項目  |  値  |</span><br><span class="line">| ---- | ---- |</span><br><span class="line">|  種類  |  User-assigned managed identity  |</span><br><span class="line">|  Azure サブスクリプション  |  作成したユーザー割り当てマネージド ID を選択します  |</span><br><span class="line">|  ユーザー割り当てマネージド ID  | 作成したユーザー割り当てマネージド ID を選択します  |</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## パイプラインを作成する</span><br><span class="line">Microsoft Graph REST API を使用して、コピーに必要な ダウンロード URL を取得するための Web アクティビティと コピー アクティビティを作成します。  </span><br><span class="line">パイプラインの全体図は以下の通りです。</span><br><span class="line"></span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png)</span><br><span class="line"></span><br><span class="line">今回のパイプラインでは、対象の SharePoint Online のドキュメント フォルダ配下にある input.xlsx ファイルを対象とします。</span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png)</span><br><span class="line"></span><br><span class="line">### Get SiteID Web アクティビティ</span><br><span class="line"></span><br><span class="line">接続したい SharePoint Online サイトの サイト ID を取得します。  </span><br><span class="line">[サイト リソースを取得する](https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&amp;tabs=http#example-2-get-a-site-by-server-relative-url) を参考に、Web アクティビティでは以下のように設定します。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">|  項目  |  値  |</span><br><span class="line">| ---- | ---- |</span><br><span class="line">|  URL  |  https://graph.microsoft.com/v1.0/sites/&lt;SharePoint Online のドメイン名&gt;.sharepoint.com:/sites/&lt;サイト名&gt;  |</span><br><span class="line">|  メソッド  |  GET  |</span><br><span class="line">|  認証  | https://graph.microsoft.com  |</span><br><span class="line">|  リソース  | ユーザー割り当てマネージド ID  |</span><br><span class="line">|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Web アクティビティの実行出力より、**id** が取得できていることを確認します。</span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png)</span><br><span class="line">　　</span><br><span class="line"></span><br><span class="line">### Get DriveID Web アクティビティ</span><br><span class="line"></span><br><span class="line">接続したい SharePoint Online サイトに紐づく Drive ID を取得します。  </span><br><span class="line">[サイトのドライブを一覧表示する](https://learn.microsoft.com/ja-jp/graph/api/drive-list?view=graph-rest-1.0&amp;tabs=http#list-a-sites-drives) を参考に、Web アクティビティでは以下のように設定します。</span><br><span class="line"></span><br><span class="line">先ほど取得したサイト ID を利用するため、URL には以下のように Get SiteID Web アクティビティの出力を利用するように記載します。Web アクティビティ名が異なる場合は、アクティビティ名と揃えてください。</span><br></pre></td></tr></table></figure>
+<p>@concat(‘<a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/&#39;">https://graph.microsoft.com/v1.0/sites/&#39;</a><br>    ,activity(‘Get SiteID’).output.id<br>    ,’/drives’<br>)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"></span><br><span class="line">|  項目  |  値  |</span><br><span class="line">| ---- | ---- |</span><br><span class="line">|  URL  |  [動的なコンテンツを追加] より、上記を記載 |</span><br><span class="line">|  メソッド  |  GET  |</span><br><span class="line">|  認証  | https://graph.microsoft.com  |</span><br><span class="line">|  リソース  | ユーザー割り当てマネージド ID  |</span><br><span class="line">|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Web アクティビティの実行出力より、**value 配列** が取得できていることを確認します。こちらの配列の中から、必要な要素をフィルターします。</span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-8.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### Filter1 Fileter アクティビティ</span><br><span class="line">必要な Document ドライブの情報のみを抽出します。以下の通り、設定します。  </span><br><span class="line">こちらも前のアクティビティの出力結果を利用しますので、必要に応じてアクティビティ名を修正してください。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>項目<br>@activity(‘Get DriveID’).output.value</p>
+<p>条件<br>@equals(item().name,’Documents’)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">|  項目  |  値  |</span><br><span class="line">| ---- | ---- |</span><br><span class="line">|  項目  |  [動的なコンテンツを追加] より、上記を記載 |</span><br><span class="line">|  条件  |  [動的なコンテンツを追加] より、上記を記載  |</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### Get File Web アクティビティ</span><br><span class="line">取得したいファイルの ダウンロード URL を取得します。  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">今回は、`input.xlsx` を取得するため `/root:/input.xlsx` と記載しております。  </span><br><span class="line">`test` フォルダ配下にある場合は、`/root:/test/input.xlsx` のように指定します。</span><br></pre></td></tr></table></figure>
+<p>@concat(<br>    ‘<a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/&#39;">https://graph.microsoft.com/v1.0/sites/&#39;</a><br>    ,activity(‘Get SiteID’).output.id<br>    ,’/drives/‘<br>    ,activity(‘Filter1’).output.value[0].id<br>    ,’/root:/input.xlsx’<br>)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">|  項目  |  値  |</span><br><span class="line">| ---- | ---- |</span><br><span class="line">|  URL  |  [動的なコンテンツを追加] より、上記を記載 |</span><br><span class="line">|  メソッド  |  GET  |</span><br><span class="line">|  認証  | https://graph.microsoft.com  |</span><br><span class="line">|  リソース  | ユーザー割り当てマネージド ID  |</span><br><span class="line">|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |</span><br><span class="line"></span><br><span class="line">Web アクティビティの実行出力より、**@microsoft.graph.downloadUrl** が取得できていることを確認します。</span><br><span class="line"></span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-9.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### Copy アクティビティ</span><br><span class="line">Get File Web アクティビティで得られた `@microsoft.graph.downloadUrl` を接続先として、コピー アクティビティを作成します。  </span><br><span class="line">ソースは、HTTP コネクタを利用しますが、以下の画像のように [ベース URL] は動的に変化するため、パラメーター化しておきます。</span><br><span class="line"></span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-10.png)  </span><br><span class="line"></span><br><span class="line">同様に、データセットの作成画面では、リンク サービスのパラメーターを埋める UI が表示されますが、パイプライン編集画面から指定するために、　　</span><br><span class="line">データセットのパラメーターを [パラメーター] タブより作成しておき、データセットのパラメーターを指定します。</span><br><span class="line"></span><br><span class="line">![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">パイプラインの編集画面にて、[ソース] &gt; [ソース データセット] &gt; [データセットのプロパティ] が表示されますので、以下のように `@microsoft.graph.downloadUrl` を指定します。</span><br></pre></td></tr></table></figure>
+<p>@activity(‘Get File’).output[‘@microsoft.graph.downloadUrl’]</p>
+<pre><code>
+![](/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png)
+
+
+設定は以上となります。　　
+</code></pre>
+
+      
+      
+        <div class="article-disclaimer">
+        
+          <p>※本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+        
+        </div>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/GraphAPI/" rel="tag">GraphAPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/SharePoint/" rel="tag">SharePoint</a></li></ul>
+
+        
+        <a href="https://github.com/jpaz-bigdata/edit/main/articles/DataFactory/how-to-connect-sp-online-by-graphapi.md" class="article-github-edit-link" target="_blank" rel="noopener noreferrer">GitHub で編集</a>
+        
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../how-to-custom-roles/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">カスタム ロールによる ADF の操作制御</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">GraphAPI を用いて SharePoint Online からファイルを移行する</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-custom-roles/">カスタム ロールによる ADF の操作制御</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-use-sami-auth4functions/">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-use-usai-auth4functions/">Azure Functions へのシステム割り当てマネージド ID 認証の設定方法 (ユーザー割り当てマネージド ID を用いる方法)</a>
+          </li>
+        
+          <li>
+            <a href="../how-to-connect-sp-online/">Azure Data Factory を使用して SharePoint Online リストからデータをコピーする</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <!-- <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure/" rel="tag">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Azure-Functions/" rel="tag">Azure Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Data-Factory/" rel="tag">Data Factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/Dataverse/" rel="tag">Dataverse</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/GraphAPI/" rel="tag">GraphAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint/" rel="tag">SharePoint</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online/" rel="tag">SharePoint Online</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" rel="tag">SharePoint Online リスト</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/data-flow/" rel="tag">data flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/external-call/" rel="tag">external-call</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" rel="tag">サポートファイル</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" rel="tag">システム割り当てマネージドID</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" rel="tag">システム変数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" rel="tag">データ関数</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" rel="tag">リンクサービス</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" rel="tag">外部呼び出し</a></li></ul>  -->
+      <ul class="tag-list"></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="../../tags/Azure/" style="font-size: 20px;">Azure</a> <a href="../../tags/Azure-Functions/" style="font-size: 15px;">Azure Functions</a> <a href="../../tags/Data-Factory/" style="font-size: 20px;">Data Factory</a> <a href="../../tags/Dataverse/" style="font-size: 10px;">Dataverse</a> <a href="../../tags/GraphAPI/" style="font-size: 10px;">GraphAPI</a> <a href="../../tags/SharePoint/" style="font-size: 10px;">SharePoint</a> <a href="../../tags/SharePoint-Online/" style="font-size: 10px;">SharePoint Online</a> <a href="../../tags/SharePoint-Online-%E3%83%AA%E3%82%B9%E3%83%88/" style="font-size: 10px;">SharePoint Online リスト</a> <a href="../../tags/data-flow/" style="font-size: 10px;">data flow</a> <a href="../../tags/external-call/" style="font-size: 10px;">external-call</a> <a href="../../tags/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/" style="font-size: 10px;">サポートファイル</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%89ID/" style="font-size: 15px;">システム割り当てマネージドID</a> <a href="../../tags/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%A4%89%E6%95%B0/" style="font-size: 10px;">システム変数</a> <a href="../../tags/%E3%83%87%E3%83%BC%E3%82%BF%E9%96%A2%E6%95%B0/" style="font-size: 10px;">データ関数</a> <a href="../../tags/%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/" style="font-size: 10px;">リンクサービス</a> <a href="../../tags/%E5%A4%96%E9%83%A8%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97/" style="font-size: 10px;">外部呼び出し</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel=”noopener”>Privacy & Cookies</a> |  
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/copyright" target="_blank" rel=”noopener”>Terms of use</a> |
+      <a href="https://www.microsoft.com/ja-jp/legal/intellectualproperty/trademarks" target="_blank" rel=”noopener”>Trademarks</a> |
+      &copy; 2025 Azure Big Data Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="../../js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

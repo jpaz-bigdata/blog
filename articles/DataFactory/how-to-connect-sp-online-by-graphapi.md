@@ -29,22 +29,22 @@ SharePoint Online 上のファイルをコピーする方法として、Microsof
 
 # 手順
 ## 認証の準備
-### ユーザー割り当てマネージド ID の作成
+### ユーザー割り当てマネージド ID の作成 (オプション 1)
 本記事では、Microsoft Graph REST API を利用する際の資格情報として、ユーザー割り当てマネージド IDを利用します。  
 ユーザー割り当てマネージド ID を作成していない場合は、以下のように Azure ポータル上から作成可能です。  
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png)
 
 
 
-### ユーザー割り当てマネージド ID の Object ID の確認
+### ユーザー割り当てマネージド ID の Object ID の確認 (オプション 1)
 作成したユーザー割り当てマネージド ID より、**オブジェクト (プリンシパル) ID** をメモします。  
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png)
 
 
-### ユーザー割り当てマネージド ID に権限を付与
+### ユーザー割り当てマネージド ID に権限を付与 (オプション 1)
 ユーザー割り当てマネージド ID に対して、SharePoint Online 上のリソースを取得するための権限を付与します。  
 任意の端末から、以下の PowerShell コマンドを実行します。
-今回は、SharePoint Online サイト上のリソースを読み取り/取得するために [Sites.ReadWrite.All](https://learn.microsoft.com/ja-jp/graph/permissions-reference#sitesreadall) 権限を付与しております。
+今回は、SharePoint Online サイト上のリソースを読み取り/取得するために [Sites.Read.All](https://learn.microsoft.com/ja-jp/graph/permissions-reference#sitesreadall) 権限を付与しております。
 
 ```
 Connect-AzureAD -TenantId "<テナントID>"
@@ -55,9 +55,7 @@ $SitesReadAll = $GraphAPI.AppRoles | where Value -like 'Sites.Read.All'
 New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIdentity.ObjectId  -PrincipalId $ManagedIdentity.ObjectId  -ResourceId $GraphAPI.ObjectId
 ```
 　　
-　　
-
-### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録
+### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録 (オプション 1)
 Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。  
 [Azure Data Factory Studio](https://adf.azure.com/) を開いていただき、[管理] > [資格情報] > [+ 新規] から作成いたします。設定する項目は以下の通りです。  
 
@@ -69,6 +67,20 @@ Azure Data Factory 上で、権限を付与したユーザー割り当てマネ�
   
 
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png)
+
+
+### アプリケーションの登録 (オプション 2)
+ユーザー 割り当てマネージド ID を用いない方法といたしまして、[アプリの登録] よりアプリケーションを作成いただき、サービス プリンシパル認証を行う方法がございます。  
+作成したアプリケーションの [アプリケーション ID] および [ディレクトリ (テナント) ID] を控えておきます。  
+![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png)
+
+### サービス プリンシパル キーの作成 (オプション 2)
+パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  
+
+### サービス プリンシパルに権限を付与 (オプション 2)
+サービス プリンシパルに Share Point Online のサイトから情報を取得するための権限を割り振ります。  
+[API のアクセス許可] から、「Microsoft Graph」における「Sites.Read.All」を付与します。  
+![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png)
 
 
 ## パイプラインを作成する
@@ -83,16 +95,30 @@ Microsoft Graph REST API を使用して、コピーに必要な ダウンロー
 ### Get SiteID Web アクティビティ
 
 接続したい SharePoint Online サイトの サイト ID を取得します。  
-[サイト リソースを取得する](https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url) を参考に、Web アクティビティでは以下のように設定します。
+[サイト リソースを取得する](https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url) を参考に、Web アクティビティでは以下のように設定します。  
+オプション 1 と 2 のそれぞれの指定方法は以下の通りです。  これ以降はオプション 1 を基準に記載いたします。
 
-
+<ユーザー割り当てマネージド ID を用いる場合>
 |  項目  |  値  |
 | ---- | ---- |
 |  URL  |  https://graph.microsoft.com/v1.0/sites/<SharePoint Online のドメイン名>.sharepoint.com:/sites/<サイト名>  |
 |  メソッド  |  GET  |
-|  認証  | https://graph.microsoft.com  |
-|  リソース  | ユーザー割り当てマネージド ID  |
-|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |
+|  認証  | ユーザー割り当てマネージド ID  |
+|  リソース  | https://graph.microsoft.com   |
+|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |　　
+  
+  　　
+
+
+<サービス プリンシパル を用いる場合>  
+|  項目  |  値  |
+| ---- | ---- |
+|  認証  | サービス プリンシパル  |
+|  テナント  | アプリケーションの登録におけるディレクトリ (テナント) ID   |
+|  サービス プリンシパル ID  | アプリケーションの登録におけるアプリケーション ID |  
+|  サービス プリンシパル資格情報の種類  | サービス プリンシパル キー |  
+|  サービス プリンシパル キー  | [証明書とシークレット] にて作成したシークレット キーの値 |  
+  
 
 
 Web アクティビティの実行出力より、**id** が取得できていることを確認します。
@@ -117,8 +143,8 @@ Web アクティビティの実行出力より、**id** が取得できている
 | ---- | ---- |
 |  URL  |  [動的なコンテンツを追加] より、上記を記載 |
 |  メソッド  |  GET  |
-|  認証  | https://graph.microsoft.com  |
-|  リソース  | ユーザー割り当てマネージド ID  |
+|  認証  | ユーザー割り当てマネージド ID  |
+|  リソース  | https://graph.microsoft.com   |
 |  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |
 
 
@@ -166,8 +192,8 @@ Web アクティビティの実行出力より、**value 配列** が取得で�
 | ---- | ---- |
 |  URL  |  [動的なコンテンツを追加] より、上記を記載 |
 |  メソッド  |  GET  |
-|  認証  | https://graph.microsoft.com  |
-|  リソース  | ユーザー割り当てマネージド ID  |
+|  認証  | ユーザー割り当てマネージド ID  |
+|  リソース  | https://graph.microsoft.com   |
 |  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |
 
 Web アクティビティの実行出力より、**@microsoft.graph.downloadUrl** が取得できていることを確認します。

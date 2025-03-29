@@ -27,8 +27,8 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-10.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-12.png">
-<meta property="article:published_time" content="2025-01-30T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-03-29T07:42:17.381Z">
+<meta property="article:published_time" content="2025-03-28T00:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-29T07:45:51.389Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -115,14 +115,14 @@
       <div class="article-share">
         Published: 
         <a href="" class="article-date-single">
-  <time datetime="2025-01-30T00:00:00.000Z" itemprop="datePublished">2025-01-30</time>
+  <time datetime="2025-03-28T00:00:00.000Z" itemprop="datePublished">2025-03-28</time>
 </a>
         
         
         
         <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+5d06deb6-963a-5dd2-a1fc-f3a0f226fbe2%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BGraphAPI+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6+SharePoint+Online+%E3%81%8B%E3%82%89%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm8twlk3i00010no1656fbn1x" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm8twq5f600010noxggga4d1f" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -173,9 +173,76 @@
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png"></p>
 <p>今回のパイプラインでは、対象の SharePoint Online のドキュメント フォルダ配下にある input.xlsx ファイルを対象とします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png"></p>
 <h3 id="Get-SiteID-Web-アクティビティ"><a href="#Get-SiteID-Web-アクティビティ" class="headerlink" title="Get SiteID Web アクティビティ"></a>Get SiteID Web アクティビティ</h3><p>接続したい SharePoint Online サイトの サイト ID を取得します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url">サイト リソースを取得する</a> を参考に、Web アクティビティでは以下のように設定します。<br>オプション 1 と 2 のそれぞれの指定方法は以下の通りです。  これ以降はオプション 1 を基準に記載いたします。</p>
-<p>&lt;ユーザー割り当てマネージド ID を用いる場合&gt;<br>|  項目  |  値  |<br>| —- | —- |<br>|  URL  |  <a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/">https://graph.microsoft.com/v1.0/sites/</a>&lt;SharePoint Online のドメイン名&gt;.sharepoint.com:/sites/&lt;サイト名&gt;  |<br>|  メソッド  |  GET  |<br>|  認証  | ユーザー割り当てマネージド ID  |<br>|  リソース  | <a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a>   |<br>|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |　　</p>
-<p>  　　</p>
-<p>&lt;サービス プリンシパル を用いる場合&gt;<br>|  項目  |  値  |<br>| —- | —- |<br>|  認証  | サービス プリンシパル  |<br>|  テナント  | アプリケーションの登録におけるディレクトリ (テナント) ID   |<br>|  サービス プリンシパル ID  | アプリケーションの登録におけるアプリケーション ID |<br>|  サービス プリンシパル資格情報の種類  | サービス プリンシパル キー |<br>|  サービス プリンシパル キー  | [証明書とシークレット] にて作成したシークレット キーの値 |  </p>
+<p>&lt;ユーザー割り当てマネージド ID を用いる場合&gt;  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>URL</td>
+<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/">https://graph.microsoft.com/v1.0/sites/</a>&lt;SharePoint Online のドメイン名&gt;.sharepoint.com:/sites/&lt;サイト名&gt;</td>
+</tr>
+<tr>
+<td>メソッド</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>認証</td>
+<td>ユーザー割り当てマネージド ID</td>
+</tr>
+<tr>
+<td>リソース</td>
+<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
+</tr>
+<tr>
+<td>資格情報</td>
+<td>Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>&lt;サービス プリンシパル を用いる場合&gt;  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>認証</td>
+<td>サービス プリンシパル</td>
+</tr>
+<tr>
+<td>テナント</td>
+<td>アプリケーションの登録におけるディレクトリ (テナント) ID</td>
+</tr>
+<tr>
+<td>サービス プリンシパル ID</td>
+<td>アプリケーションの登録におけるアプリケーション ID</td>
+</tr>
+<tr>
+<td>サービス プリンシパル資格情報の種類</td>
+<td>サービス プリンシパル キー</td>
+</tr>
+<tr>
+<td>サービス プリンシパル キー</td>
+<td>[証明書とシークレット] にて作成したシークレット キーの値</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <p>Web アクティビティの実行出力より、<strong>id</strong> が取得できていることを確認します。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png">
 　　</p>
 <h3 id="Get-DriveID-Web-アクティビティ"><a href="#Get-DriveID-Web-アクティビティ" class="headerlink" title="Get DriveID Web アクティビティ"></a>Get DriveID Web アクティビティ</h3><p>接続したい SharePoint Online サイトに紐づく Drive ID を取得します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/api/drive-list?view=graph-rest-1.0&tabs=http#list-a-sites-drives">サイトのドライブを一覧表示する</a> を参考に、Web アクティビティでは以下のように設定します。</p>
@@ -357,7 +424,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/05/">2023 / 05</a></li></ul>
     </div>
   </div>
 

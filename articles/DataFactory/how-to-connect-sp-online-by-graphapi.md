@@ -1,6 +1,6 @@
 ---
 title: GraphAPI を用いて SharePoint Online からファイルを移行する
-date: 2025-01-30 09:00:00
+date: 2025-03-28 09:00:00
 tags:
   - Azure
   - Data Factory
@@ -58,7 +58,7 @@ New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIde
 ### Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録 (オプション 1)
 Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。  
 [Azure Data Factory Studio](https://adf.azure.com/) を開いていただき、[管理] > [資格情報] > [+ 新規] から作成いたします。設定する項目は以下の通りです。  
-
+  
 |  項目  |  値  |
 | ---- | ---- |
 |  種類  |  User-assigned managed identity  |
@@ -98,7 +98,8 @@ Microsoft Graph REST API を使用して、コピーに必要な ダウンロー
 [サイト リソースを取得する](https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url) を参考に、Web アクティビティでは以下のように設定します。  
 オプション 1 と 2 のそれぞれの指定方法は以下の通りです。  これ以降はオプション 1 を基準に記載いたします。
 
-<ユーザー割り当てマネージド ID を用いる場合>
+<ユーザー割り当てマネージド ID を用いる場合>  
+  
 |  項目  |  値  |
 | ---- | ---- |
 |  URL  |  https://graph.microsoft.com/v1.0/sites/<SharePoint Online のドメイン名>.sharepoint.com:/sites/<サイト名>  |
@@ -111,6 +112,7 @@ Microsoft Graph REST API を使用して、コピーに必要な ダウンロー
 
 
 <サービス プリンシパル を用いる場合>  
+  
 |  項目  |  値  |
 | ---- | ---- |
 |  認証  | サービス プリンシパル  |

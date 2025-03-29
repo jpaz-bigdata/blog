@@ -17,6 +17,8 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png">
@@ -26,7 +28,7 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-12.png">
 <meta property="article:published_time" content="2025-01-30T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-01-30T09:44:26.022Z">
+<meta property="article:modified_time" content="2025-03-29T07:42:17.381Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -120,7 +122,7 @@
         
         <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+5d06deb6-963a-5dd2-a1fc-f3a0f226fbe2%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BGraphAPI+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6+SharePoint+Online+%E3%81%8B%E3%82%89%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm6j5f8al00010nmnajt42vjl" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm8twlk3i00010no1656fbn1x" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -133,13 +135,12 @@
 <li>ユーザー割り当てマネージド ID</li>
 <li>Microsoft Graph REST API</li>
 </ul>
-<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="認証の準備"><a href="#認証の準備" class="headerlink" title="認証の準備"></a>認証の準備</h2><h3 id="ユーザー割り当てマネージド-ID-の作成"><a href="#ユーザー割り当てマネージド-ID-の作成" class="headerlink" title="ユーザー割り当てマネージド ID の作成"></a>ユーザー割り当てマネージド ID の作成</h3><p>本記事では、Microsoft Graph REST API を利用する際の資格情報として、ユーザー割り当てマネージド IDを利用します。<br>ユーザー割り当てマネージド ID を作成していない場合は、以下のように Azure ポータル上から作成可能です。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png"></p>
-<h3 id="ユーザー割り当てマネージド-ID-の-Object-ID-の確認"><a href="#ユーザー割り当てマネージド-ID-の-Object-ID-の確認" class="headerlink" title="ユーザー割り当てマネージド ID の Object ID の確認"></a>ユーザー割り当てマネージド ID の Object ID の確認</h3><p>作成したユーザー割り当てマネージド ID より、<strong>オブジェクト (プリンシパル) ID</strong> をメモします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png"></p>
-<h3 id="ユーザー割り当てマネージド-ID-に権限を付与"><a href="#ユーザー割り当てマネージド-ID-に権限を付与" class="headerlink" title="ユーザー割り当てマネージド ID に権限を付与"></a>ユーザー割り当てマネージド ID に権限を付与</h3><p>ユーザー割り当てマネージド ID に対して、SharePoint Online 上のリソースを取得するための権限を付与します。<br>任意の端末から、以下の PowerShell コマンドを実行します。<br>今回は、SharePoint Online サイト上のリソースを読み取り/取得するために <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/permissions-reference#sitesreadall">Sites.ReadWrite.All</a> 権限を付与しております。</p>
+<h1 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h1><h2 id="認証の準備"><a href="#認証の準備" class="headerlink" title="認証の準備"></a>認証の準備</h2><h3 id="ユーザー割り当てマネージド-ID-の作成-オプション-1"><a href="#ユーザー割り当てマネージド-ID-の作成-オプション-1" class="headerlink" title="ユーザー割り当てマネージド ID の作成 (オプション 1)"></a>ユーザー割り当てマネージド ID の作成 (オプション 1)</h3><p>本記事では、Microsoft Graph REST API を利用する際の資格情報として、ユーザー割り当てマネージド IDを利用します。<br>ユーザー割り当てマネージド ID を作成していない場合は、以下のように Azure ポータル上から作成可能です。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-2.png"></p>
+<h3 id="ユーザー割り当てマネージド-ID-の-Object-ID-の確認-オプション-1"><a href="#ユーザー割り当てマネージド-ID-の-Object-ID-の確認-オプション-1" class="headerlink" title="ユーザー割り当てマネージド ID の Object ID の確認 (オプション 1)"></a>ユーザー割り当てマネージド ID の Object ID の確認 (オプション 1)</h3><p>作成したユーザー割り当てマネージド ID より、<strong>オブジェクト (プリンシパル) ID</strong> をメモします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-3.png"></p>
+<h3 id="ユーザー割り当てマネージド-ID-に権限を付与-オプション-1"><a href="#ユーザー割り当てマネージド-ID-に権限を付与-オプション-1" class="headerlink" title="ユーザー割り当てマネージド ID に権限を付与 (オプション 1)"></a>ユーザー割り当てマネージド ID に権限を付与 (オプション 1)</h3><p>ユーザー割り当てマネージド ID に対して、SharePoint Online 上のリソースを取得するための権限を付与します。<br>任意の端末から、以下の PowerShell コマンドを実行します。<br>今回は、SharePoint Online サイト上のリソースを読み取り/取得するために <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/permissions-reference#sitesreadall">Sites.Read.All</a> 権限を付与しております。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Connect-AzureAD -TenantId &quot;&lt;テナントID&gt;&quot;</span><br><span class="line">$ManagedIdentity = Get-AzureADServicePrincipal -ObjectId &quot;&lt;ユーザー割り当てマネージド ID のオブジェクト (プリンシパル) ID&gt;&quot;</span><br><span class="line">$GraphAPI = Get-AzureADServicePrincipal -Filter &quot;DisplayName eq &#x27;Microsoft Graph&#x27;&quot;</span><br><span class="line">$SitesReadAll = $GraphAPI.AppRoles | where Value -like &#x27;Sites.Read.All&#x27;</span><br><span class="line"></span><br><span class="line">New-AzureADServiceAppRoleAssignment  -Id $SitesReadAll.Id  -ObjectId $ManagedIdentity.ObjectId  -PrincipalId $ManagedIdentity.ObjectId  -ResourceId $GraphAPI.ObjectId</span><br></pre></td></tr></table></figure>
-<p>　　
-　　</p>
-<h3 id="Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録"><a href="#Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録" class="headerlink" title="Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録"></a>Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録</h3><p>Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。<br><a target="_blank" rel="noopener" href="https://adf.azure.com/">Azure Data Factory Studio</a> を開いていただき、[管理] &gt; [資格情報] &gt; [+ 新規] から作成いたします。設定する項目は以下の通りです。  </p>
+<p>　　</p>
+<h3 id="Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録-オプション-1"><a href="#Azure-Data-Factory-Studio-上でユーザー割り当てマネージド-ID-の登録-オプション-1" class="headerlink" title="Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録 (オプション 1)"></a>Azure Data Factory Studio 上でユーザー割り当てマネージド ID の登録 (オプション 1)</h3><p>Azure Data Factory 上で、権限を付与したユーザー割り当てマネージド ID が利用できるように登録を行います。<br><a target="_blank" rel="noopener" href="https://adf.azure.com/">Azure Data Factory Studio</a> を開いていただき、[管理] &gt; [資格情報] &gt; [+ 新規] から作成いたします。設定する項目は以下の通りです。  </p>
 <table>
 <thead>
 <tr>
@@ -165,38 +166,16 @@
 </tr>
 </tbody></table>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png"></p>
+<h3 id="アプリケーションの登録-オプション-2"><a href="#アプリケーションの登録-オプション-2" class="headerlink" title="アプリケーションの登録 (オプション 2)"></a>アプリケーションの登録 (オプション 2)</h3><p>ユーザー 割り当てマネージド ID を用いない方法といたしまして、[アプリの登録] よりアプリケーションを作成いただき、サービス プリンシパル認証を行う方法がございます。<br>作成したアプリケーションの [アプリケーション ID] および [ディレクトリ (テナント) ID] を控えておきます。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png"></p>
+<h3 id="サービス-プリンシパル-キーの作成-オプション-2"><a href="#サービス-プリンシパル-キーの作成-オプション-2" class="headerlink" title="サービス プリンシパル キーの作成 (オプション 2)"></a>サービス プリンシパル キーの作成 (オプション 2)</h3><p>パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  </p>
+<h3 id="サービス-プリンシパルに権限を付与-オプション-2"><a href="#サービス-プリンシパルに権限を付与-オプション-2" class="headerlink" title="サービス プリンシパルに権限を付与 (オプション 2)"></a>サービス プリンシパルに権限を付与 (オプション 2)</h3><p>サービス プリンシパルに Share Point Online のサイトから情報を取得するための権限を割り振ります。<br>[API のアクセス許可] から、「Microsoft Graph」における「Sites.Read.All」を付与します。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png"></p>
 <h2 id="パイプラインを作成する"><a href="#パイプラインを作成する" class="headerlink" title="パイプラインを作成する"></a>パイプラインを作成する</h2><p>Microsoft Graph REST API を使用して、コピーに必要な ダウンロード URL を取得するための Web アクティビティと コピー アクティビティを作成します。<br>パイプラインの全体図は以下の通りです。</p>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png"></p>
 <p>今回のパイプラインでは、対象の SharePoint Online のドキュメント フォルダ配下にある input.xlsx ファイルを対象とします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png"></p>
-<h3 id="Get-SiteID-Web-アクティビティ"><a href="#Get-SiteID-Web-アクティビティ" class="headerlink" title="Get SiteID Web アクティビティ"></a>Get SiteID Web アクティビティ</h3><p>接続したい SharePoint Online サイトの サイト ID を取得します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url">サイト リソースを取得する</a> を参考に、Web アクティビティでは以下のように設定します。</p>
-<table>
-<thead>
-<tr>
-<th>項目</th>
-<th>値</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>URL</td>
-<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/">https://graph.microsoft.com/v1.0/sites/</a>&lt;SharePoint Online のドメイン名&gt;.sharepoint.com:/sites/&lt;サイト名&gt;</td>
-</tr>
-<tr>
-<td>メソッド</td>
-<td>GET</td>
-</tr>
-<tr>
-<td>認証</td>
-<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
-</tr>
-<tr>
-<td>リソース</td>
-<td>ユーザー割り当てマネージド ID</td>
-</tr>
-<tr>
-<td>資格情報</td>
-<td>Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報</td>
-</tr>
-</tbody></table>
+<h3 id="Get-SiteID-Web-アクティビティ"><a href="#Get-SiteID-Web-アクティビティ" class="headerlink" title="Get SiteID Web アクティビティ"></a>Get SiteID Web アクティビティ</h3><p>接続したい SharePoint Online サイトの サイト ID を取得します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/api/site-get?view=graph-rest-1.0&tabs=http#example-2-get-a-site-by-server-relative-url">サイト リソースを取得する</a> を参考に、Web アクティビティでは以下のように設定します。<br>オプション 1 と 2 のそれぞれの指定方法は以下の通りです。  これ以降はオプション 1 を基準に記載いたします。</p>
+<p>&lt;ユーザー割り当てマネージド ID を用いる場合&gt;<br>|  項目  |  値  |<br>| —- | —- |<br>|  URL  |  <a target="_blank" rel="noopener" href="https://graph.microsoft.com/v1.0/sites/">https://graph.microsoft.com/v1.0/sites/</a>&lt;SharePoint Online のドメイン名&gt;.sharepoint.com:/sites/&lt;サイト名&gt;  |<br>|  メソッド  |  GET  |<br>|  認証  | ユーザー割り当てマネージド ID  |<br>|  リソース  | <a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a>   |<br>|  資格情報  | Azure Data Factory Studio で登録したユーザー割り当てマネージド ID の資格情報 |　　</p>
+<p>  　　</p>
+<p>&lt;サービス プリンシパル を用いる場合&gt;<br>|  項目  |  値  |<br>| —- | —- |<br>|  認証  | サービス プリンシパル  |<br>|  テナント  | アプリケーションの登録におけるディレクトリ (テナント) ID   |<br>|  サービス プリンシパル ID  | アプリケーションの登録におけるアプリケーション ID |<br>|  サービス プリンシパル資格情報の種類  | サービス プリンシパル キー |<br>|  サービス プリンシパル キー  | [証明書とシークレット] にて作成したシークレット キーの値 |  </p>
 <p>Web アクティビティの実行出力より、<strong>id</strong> が取得できていることを確認します。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png">
 　　</p>
 <h3 id="Get-DriveID-Web-アクティビティ"><a href="#Get-DriveID-Web-アクティビティ" class="headerlink" title="Get DriveID Web アクティビティ"></a>Get DriveID Web アクティビティ</h3><p>接続したい SharePoint Online サイトに紐づく Drive ID を取得します。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/graph/api/drive-list?view=graph-rest-1.0&tabs=http#list-a-sites-drives">サイトのドライブを一覧表示する</a> を参考に、Web アクティビティでは以下のように設定します。</p>
@@ -219,11 +198,11 @@
 </tr>
 <tr>
 <td>認証</td>
-<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
+<td>ユーザー割り当てマネージド ID</td>
 </tr>
 <tr>
 <td>リソース</td>
-<td>ユーザー割り当てマネージド ID</td>
+<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
 </tr>
 <tr>
 <td>資格情報</td>
@@ -271,11 +250,11 @@
 </tr>
 <tr>
 <td>認証</td>
-<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
+<td>ユーザー割り当てマネージド ID</td>
 </tr>
 <tr>
 <td>リソース</td>
-<td>ユーザー割り当てマネージド ID</td>
+<td><a target="_blank" rel="noopener" href="https://graph.microsoft.com/">https://graph.microsoft.com</a></td>
 </tr>
 <tr>
 <td>資格情報</td>

@@ -74,13 +74,31 @@ Azure Data Factory 上で、権限を付与したユーザー割り当てマネ�
 作成したアプリケーションの [アプリケーション ID] および [ディレクトリ (テナント) ID] を控えておきます。  
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png)
 
-### サービス プリンシパル キーの作成 (オプション 2)
-パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  
-
 ### サービス プリンシパルに権限を付与 (オプション 2)
 サービス プリンシパルに Share Point Online のサイトから情報を取得するための権限を割り振ります。  
 [API のアクセス許可] から、「Microsoft Graph」における「Sites.Read.All」を付与します。  
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png)
+
+
+### サービス プリンシパル キーの作成 (オプション 2-1)
+パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  
+
+### サービス プリンシパル 証明書の作成 (オプション 2-2)
+パイプラインにて、サービス プリンシパル 証明書を用いて認証を行う場合は、上記画像の [証明書とシークレット] より、証明書の登録を行います。  
+証明書の作成および証明書を base64 でエンコードする手順は以下となります。  
+  
+
+1. 証明書の作成  
+[公開証明書を作成してエクスポートする](https://learn.microsoft.com/ja-jp/entra/identity-platform/howto-create-self-signed-certificate#create-and-export-your-public-certificate) を参考に、証明書の作成を行います。  
+
+2. 証明書のアップロード
+作成した証明書をサービス プリンシパルに登録します。
+![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-15.png)  
+
+3. 証明書の内容をbase-64形式に変換  
+[HDInsight でサービス プリンシパル証明書の内容を base-64 でエンコードされた文字列形式に変換する](https://learn.microsoft.com/ja-jp/azure/hdinsight/hadoop/hdinsight-troubleshoot-converting-service-principal-certificate#resolution) を参考に、証明書の内容を base-64 形式に変換します。
+  
+
 
 
 ## パイプラインを作成する
@@ -111,7 +129,7 @@ Microsoft Graph REST API を使用して、コピーに必要な ダウンロー
   　　
 
 
-<サービス プリンシパル を用いる場合>  
+<サービス プリンシパル キーを用いる場合>  
   
 |  項目  |  値  |
 | ---- | ---- |
@@ -120,9 +138,24 @@ Microsoft Graph REST API を使用して、コピーに必要な ダウンロー
 |  サービス プリンシパル ID  | アプリケーションの登録におけるアプリケーション ID |  
 |  サービス プリンシパル資格情報の種類  | サービス プリンシパル キー |  
 |  サービス プリンシパル キー  | [証明書とシークレット] にて作成したシークレット キーの値 |  
+
+  
+  
+<サービス プリンシパル 証明書を用いる場合>  
+  
+|  項目  |  値  |
+| ---- | ---- |
+|  認証  | サービス プリンシパル  |
+|  テナント  | アプリケーションの登録におけるディレクトリ (テナント) ID   |
+|  サービス プリンシパル ID  | アプリケーションの登録におけるアプリケーション ID |  
+|  サービス プリンシパル資格情報の種類  | サービス プリンシパル証明書 |  
+|  サービス プリンシパル証明書  | base64 でエンコードした証明書の内容 |  
   
 
+   
 
+    
+    
 Web アクティビティの実行出力より、**id** が取得できていることを確認します。
 ![](./how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png)
 　　

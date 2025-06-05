@@ -19,6 +19,7 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png">
+<meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-15.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-7.png">
@@ -28,7 +29,7 @@
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-11.png">
 <meta property="og:image" content="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-12.png">
 <meta property="article:published_time" content="2025-03-28T00:00:00.000Z">
-<meta property="article:modified_time" content="2025-03-29T07:45:51.389Z">
+<meta property="article:modified_time" content="2025-06-05T02:49:36.006Z">
 <meta property="article:author" content="Azure Big Data Support Team">
 <meta property="article:tag" content="Azure">
 <meta property="article:tag" content="Data Factory">
@@ -122,7 +123,7 @@
         
         <a href="https://github.com/jpaz-bigdata/issues/new?title=&body=%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A%E2%9A%A0+*Do+not+edit+this+section.%0A%0A*+ID%3A+5d06deb6-963a-5dd2-a1fc-f3a0f226fbe2%0A*+%E5%AF%BE%E8%B1%A1%E8%A8%98%E4%BA%8B%3A+%5BGraphAPI+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6+SharePoint+Online+%E3%81%8B%E3%82%89%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%5D%28https%3A%2F%2Fjpaz-bigdata.github.io%2Fblog%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi%2F%29%0A*+Content+Source%3A+%5Barticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%5D%28https%3A%2F%2Fgithub.com%2Fjpaz-bigdata%2Fblob%2Fmain%2Farticles%2FDataFactory%2Fhow-to-connect-sp-online-by-graphapi.md%29%0A*+Author%3A+" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
         
-        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cm8twq5f600010noxggga4d1f" class="article-share-link">共有</a>
+        <a data-url="https://jpaz-bigdata.github.io/blog/DataFactory/how-to-connect-sp-online-by-graphapi/" data-id="cmbis331000010nry4ku3609g" class="article-share-link">共有</a>
       </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -167,8 +168,17 @@
 </tbody></table>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-4.png"></p>
 <h3 id="アプリケーションの登録-オプション-2"><a href="#アプリケーションの登録-オプション-2" class="headerlink" title="アプリケーションの登録 (オプション 2)"></a>アプリケーションの登録 (オプション 2)</h3><p>ユーザー 割り当てマネージド ID を用いない方法といたしまして、[アプリの登録] よりアプリケーションを作成いただき、サービス プリンシパル認証を行う方法がございます。<br>作成したアプリケーションの [アプリケーション ID] および [ディレクトリ (テナント) ID] を控えておきます。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-13.png"></p>
-<h3 id="サービス-プリンシパル-キーの作成-オプション-2"><a href="#サービス-プリンシパル-キーの作成-オプション-2" class="headerlink" title="サービス プリンシパル キーの作成 (オプション 2)"></a>サービス プリンシパル キーの作成 (オプション 2)</h3><p>パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  </p>
 <h3 id="サービス-プリンシパルに権限を付与-オプション-2"><a href="#サービス-プリンシパルに権限を付与-オプション-2" class="headerlink" title="サービス プリンシパルに権限を付与 (オプション 2)"></a>サービス プリンシパルに権限を付与 (オプション 2)</h3><p>サービス プリンシパルに Share Point Online のサイトから情報を取得するための権限を割り振ります。<br>[API のアクセス許可] から、「Microsoft Graph」における「Sites.Read.All」を付与します。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-14.png"></p>
+<h3 id="サービス-プリンシパル-キーの作成-オプション-2-1"><a href="#サービス-プリンシパル-キーの作成-オプション-2-1" class="headerlink" title="サービス プリンシパル キーの作成 (オプション 2-1)"></a>サービス プリンシパル キーの作成 (オプション 2-1)</h3><p>パイプラインにて、サービス プリンシパル キーを用いて認証を行う場合は、上記画像の [証明書とシークレット] より、シークレット キーの作成を行います。  </p>
+<h3 id="サービス-プリンシパル-証明書の作成-オプション-2-2"><a href="#サービス-プリンシパル-証明書の作成-オプション-2-2" class="headerlink" title="サービス プリンシパル 証明書の作成 (オプション 2-2)"></a>サービス プリンシパル 証明書の作成 (オプション 2-2)</h3><p>パイプラインにて、サービス プリンシパル 証明書を用いて認証を行う場合は、上記画像の [証明書とシークレット] より、証明書の登録を行います。<br>証明書の作成および証明書を base64 でエンコードする手順は以下となります。  </p>
+<ol>
+<li><p>証明書の作成<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/entra/identity-platform/howto-create-self-signed-certificate#create-and-export-your-public-certificate">公開証明書を作成してエクスポートする</a> を参考に、証明書の作成を行います。  </p>
+</li>
+<li><p>証明書のアップロード<br>作成した証明書をサービス プリンシパルに登録します。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-15.png">  </p>
+</li>
+<li><p>証明書の内容をbase-64形式に変換<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/hdinsight/hadoop/hdinsight-troubleshoot-converting-service-principal-certificate#resolution">HDInsight でサービス プリンシパル証明書の内容を base-64 でエンコードされた文字列形式に変換する</a> を参考に、証明書の内容を base-64 形式に変換します。</p>
+</li>
+</ol>
 <h2 id="パイプラインを作成する"><a href="#パイプラインを作成する" class="headerlink" title="パイプラインを作成する"></a>パイプラインを作成する</h2><p>Microsoft Graph REST API を使用して、コピーに必要な ダウンロード URL を取得するための Web アクティビティと コピー アクティビティを作成します。<br>パイプラインの全体図は以下の通りです。</p>
 <p><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-5.png"></p>
 <p>今回のパイプラインでは、対象の SharePoint Online のドキュメント フォルダ配下にある input.xlsx ファイルを対象とします。<br><img src="/blog/DataFactory/how-to-connect-sp-online-by-graphapi/how-to-connect-sp-online-by-graphapi-6.png"></p>
@@ -210,7 +220,7 @@
 <td></td>
 </tr>
 </tbody></table>
-<p>&lt;サービス プリンシパル を用いる場合&gt;  </p>
+<p>&lt;サービス プリンシパル キーを用いる場合&gt;  </p>
 <table>
 <thead>
 <tr>
@@ -237,6 +247,35 @@
 <tr>
 <td>サービス プリンシパル キー</td>
 <td>[証明書とシークレット] にて作成したシークレット キーの値</td>
+</tr>
+</tbody></table>
+<p>&lt;サービス プリンシパル 証明書を用いる場合&gt;  </p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>認証</td>
+<td>サービス プリンシパル</td>
+</tr>
+<tr>
+<td>テナント</td>
+<td>アプリケーションの登録におけるディレクトリ (テナント) ID</td>
+</tr>
+<tr>
+<td>サービス プリンシパル ID</td>
+<td>アプリケーションの登録におけるアプリケーション ID</td>
+</tr>
+<tr>
+<td>サービス プリンシパル資格情報の種類</td>
+<td>サービス プリンシパル証明書</td>
+</tr>
+<tr>
+<td>サービス プリンシパル証明書</td>
+<td>base64 でエンコードした証明書の内容</td>
 </tr>
 <tr>
 <td></td>
